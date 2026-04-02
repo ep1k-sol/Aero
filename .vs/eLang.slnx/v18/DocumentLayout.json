@@ -1,0 +1,118 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\projects\\eLang\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|d:\\projects\\elang\\elang\\expr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\expr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|d:\\projects\\elang\\elang\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|d:\\projects\\elang\\elang\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|d:\\projects\\elang\\elang\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|d:\\projects\\elang\\elang\\parser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\parser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|d:\\projects\\elang\\elang\\tokentype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\tokentype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Expr.cs",
+              "DocumentMoniker": "D:\\projects\\eLang\\eLang\\Expr.cs",
+              "RelativeDocumentMoniker": "eLang\\Expr.cs",
+              "ToolTip": "D:\\projects\\eLang\\eLang\\Expr.cs",
+              "RelativeToolTip": "eLang\\Expr.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-29T11:10:18.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Parser.cs",
+              "DocumentMoniker": "D:\\projects\\eLang\\eLang\\Parser.cs",
+              "RelativeDocumentMoniker": "eLang\\Parser.cs",
+              "ToolTip": "D:\\projects\\eLang\\eLang\\Parser.cs",
+              "RelativeToolTip": "eLang\\Parser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T10:36:47.39Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Token.cs",
+              "DocumentMoniker": "D:\\projects\\eLang\\eLang\\Token.cs",
+              "RelativeDocumentMoniker": "eLang\\Token.cs",
+              "ToolTip": "D:\\projects\\eLang\\eLang\\Token.cs",
+              "RelativeToolTip": "eLang\\Token.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T05:05:53.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\projects\\eLang\\eLang\\Program.cs",
+              "RelativeDocumentMoniker": "eLang\\Program.cs",
+              "ToolTip": "D:\\projects\\eLang\\eLang\\Program.cs",
+              "RelativeToolTip": "eLang\\Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAYwDgAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T13:26:46.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Scanner.cs",
+              "DocumentMoniker": "D:\\projects\\eLang\\eLang\\Scanner.cs",
+              "RelativeDocumentMoniker": "eLang\\Scanner.cs",
+              "ToolTip": "D:\\projects\\eLang\\eLang\\Scanner.cs",
+              "RelativeToolTip": "eLang\\Scanner.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T13:26:03.852Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TokenType.cs",
+              "DocumentMoniker": "D:\\projects\\eLang\\eLang\\TokenType.cs",
+              "RelativeDocumentMoniker": "eLang\\TokenType.cs",
+              "ToolTip": "D:\\projects\\eLang\\eLang\\TokenType.cs",
+              "RelativeToolTip": "eLang\\TokenType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T12:49:32.292Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
