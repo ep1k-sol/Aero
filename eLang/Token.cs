@@ -2,10 +2,10 @@
 
 class Token
 {
-    readonly TokenType type;
-    readonly string lexeme;
-    readonly object? literal;
-    readonly int line;
+    public readonly TokenType type;
+    public readonly string lexeme;
+    public readonly object? literal;
+    public readonly int line;
 
     public Token(TokenType type, string lexeme, object? literal, int line)
     {
@@ -13,6 +13,13 @@ class Token
         this.lexeme = lexeme;
         this.literal = literal;
         this.line = line;
+    }
+
+    public bool Is(TokenType tokentype)
+    {
+        if (this.type == tokentype) return true;
+
+        return false;
     }
 
     public override string ToString()

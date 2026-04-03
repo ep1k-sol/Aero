@@ -2,12 +2,14 @@
 
 abstract class Expr {}
 
+// 문자 or 숫자
 class Literal : Expr
 {
     public object? value;
     public Literal(object? value) { this.value = value; }
 }
 
+// 항
 class Binary : Expr
 {
     public Expr left;
@@ -21,6 +23,7 @@ class Binary : Expr
     }
 }
 
+// 부호
 class Unary : Expr
 {
     public Token op;
@@ -32,6 +35,7 @@ class Unary : Expr
     }
 }
 
+// 숫자, 괄호
 class Group : Expr
 {
     public Expr paren;

@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\oem\\.nuget\\packages\\": {}
+    "C:\\Users\\solge\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\projects\\eLang\\eLang\\eLang.csproj",
+      "projectUniqueName": "C:\\projects\\e-lang\\eLang\\eLang.csproj",
       "projectName": "eLang",
-      "projectPath": "D:\\projects\\eLang\\eLang\\eLang.csproj",
-      "packagesPath": "C:\\Users\\oem\\.nuget\\packages\\",
-      "outputPath": "D:\\projects\\eLang\\eLang\\obj\\",
+      "projectPath": "C:\\projects\\e-lang\\eLang\\eLang.csproj",
+      "packagesPath": "C:\\Users\\solge\\.nuget\\packages\\",
+      "outputPath": "C:\\projects\\e-lang\\eLang\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\oem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\solge\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
