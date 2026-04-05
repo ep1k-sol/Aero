@@ -1,0 +1,6 @@
+﻿namespace eLang;
+
+class Debug
+{
+    
+}

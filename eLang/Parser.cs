@@ -1,4 +1,6 @@
-﻿namespace eLang;
+﻿using System.Runtime.CompilerServices;
+
+namespace eLang;
 
 class Parser
 {
@@ -15,7 +17,7 @@ class Parser
         return Expression();
     }
 
-    // 항
+    // Term ( ( "+" | "-" ) Term )*
     Expr Expression()
     {
         var left = Term();
@@ -32,9 +34,10 @@ class Parser
         return left;
     }
 
+    // Factor ( ( "*" | "/" ) Factor )*
     Expr Term()
     {
-        var left = Primary();
+        var left = Factor();
         var token = _tokens[current];
 
         if (token.Is(TokenType.STAR) || token.Is(TokenType.SLASH))
@@ -48,18 +51,48 @@ class Parser
         return left;
     }
 
+    // ( "+" | "-" ) Factor | Primary
+    Expr Factor()
+    {
+        if (_tokens[current].Is(TokenType.MINUS) || _tokens[current].Is(TokenType.PLUS))
+        {
+            var op = Advance();
+            var right = Primary();
+
+            return new Unary(op, right);
+        }
+
+        return Primary();
+    }
+
+    // NUMBER | "(" Expression ")"
     Expr Primary()
     {
-        var node = Advance();
-
-        if
-        if (node.Is(TokenType.NUMBER))
+        if (Match(TokenType.LEFT_PAREN))
         {
+            var expr = Expression();
+
+            Consume(TokenType.RIGHT_PAREN, Errors.UNTERMINATED_PARENTHESIS);
+
+            return new Group(expr);
+        }
+        else
+        {
+            var node = Advance();
+
             return new Literal(node);
         }
-        else if (node.Is(TokenType.LEFT_PAREN))
+    }
+
+    void Consume(TokenType type, string error)
+    {
+        if (_tokens[current].type == type)
         {
-            
+            current++;
+        }
+        else
+        {
+            Program.Error(_tokens[current].line, error);
         }
     }
 
@@ -68,6 +101,15 @@ class Parser
         if (IsAtEnd()) return TokenType.EOF;
 
         return _tokens[current].type;
+    }
+
+    bool Match(TokenType expected)
+    {
+        if (IsAtEnd()) return false;
+        if (_tokens[current].type != expected) return false;
+
+        current++;
+        return true;
     }
 
     Token Advance()

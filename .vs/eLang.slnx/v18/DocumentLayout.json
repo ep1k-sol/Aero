@@ -7,20 +7,20 @@
       "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\parser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|c:\\projects\\e-lang\\elang\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|c:\\projects\\e-lang\\elang\\errors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\errors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|c:\\projects\\e-lang\\elang\\expr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\expr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|c:\\projects\\e-lang\\elang\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|c:\\projects\\e-lang\\elang\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|c:\\projects\\e-lang\\elang\\tokentype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24F78A00-DA39-C6AB-B597-0549CE059EE0}|eLang\\eLang.csproj|solutionrelative:elang\\tokentype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +30,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Errors.cs",
+              "DocumentMoniker": "C:\\projects\\e-lang\\eLang\\Errors.cs",
+              "RelativeDocumentMoniker": "eLang\\Errors.cs",
+              "ToolTip": "C:\\projects\\e-lang\\eLang\\Errors.cs",
+              "RelativeToolTip": "eLang\\Errors.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T07:17:09.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Token.cs",
               "DocumentMoniker": "C:\\projects\\e-lang\\eLang\\Token.cs",
               "RelativeDocumentMoniker": "eLang\\Token.cs",
@@ -42,19 +55,21 @@
               "RelativeToolTip": "eLang\\Token.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-03T07:01:44.271Z"
+              "WhenOpened": "2026-04-03T07:01:44.271Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Expr.cs",
               "DocumentMoniker": "C:\\projects\\e-lang\\eLang\\Expr.cs",
               "RelativeDocumentMoniker": "eLang\\Expr.cs",
               "ToolTip": "C:\\projects\\e-lang\\eLang\\Expr.cs",
               "RelativeToolTip": "eLang\\Expr.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAiwA4AAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-29T11:10:18.176Z"
+              "WhenOpened": "2026-03-29T11:10:18.176Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -64,34 +79,23 @@
               "RelativeDocumentMoniker": "eLang\\Parser.cs",
               "ToolTip": "C:\\projects\\e-lang\\eLang\\Parser.cs",
               "RelativeToolTip": "eLang\\Parser.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAYwB0AAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAswEIAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-19T10:36:47.39Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Scanner.cs",
               "DocumentMoniker": "C:\\projects\\e-lang\\eLang\\Scanner.cs",
               "RelativeDocumentMoniker": "eLang\\Scanner.cs",
               "ToolTip": "C:\\projects\\e-lang\\eLang\\Scanner.cs",
               "RelativeToolTip": "eLang\\Scanner.cs",
-              "ViewState": "AgIAAIAAAAAAAAAAAAA7wJIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAAADUAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-14T13:26:03.852Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TokenType.cs",
-              "DocumentMoniker": "C:\\projects\\e-lang\\eLang\\TokenType.cs",
-              "RelativeDocumentMoniker": "eLang\\TokenType.cs",
-              "ToolTip": "C:\\projects\\e-lang\\eLang\\TokenType.cs",
-              "RelativeToolTip": "eLang\\TokenType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-14T12:49:32.292Z"
+              "WhenOpened": "2026-03-14T13:26:03.852Z",
+              "EditorCaption": ""
             }
           ]
         }

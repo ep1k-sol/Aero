@@ -41,6 +41,7 @@ class Scanner
             case '.': AddToken(TokenType.DOT); break;
             case ',': AddToken(TokenType.COMMA); break;
             case ';': AddToken(TokenType.SEMICOLON); break;
+            case '^': AddToken(TokenType.POWER); break;
             case '%': AddToken(TokenType.MODULO); break;
 
             // two characters
@@ -74,7 +75,7 @@ class Scanner
                 if (IsDigit(c))
                     Number();
                 else
-                    Program.Error(line, "Unexpected Character");
+                    Program.Error(line, Errors.UNEXPECTED_CHAR);
                 break;
         }
     }
@@ -103,7 +104,7 @@ class Scanner
         
         if (IsAtEnd())
         {
-            Program.Error(line, "Unterminated string");
+            Program.Error(line, Errors.UNTERMINATED_STRING);
             return;
         }
 
