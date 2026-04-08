@@ -1,4 +1,6 @@
-﻿namespace eLang;
+﻿using System.Data.Common;
+
+namespace eLang;
 
 class Scanner
 {
@@ -69,14 +71,29 @@ class Scanner
             case '\n': line++; break;
 
 
-              
+
 
             default:
                 if (IsDigit(c))
                     Number();
+                else if (IsAlpha(c))
+                    Identifier();
                 else
+
                     Program.Error(line, Errors.UNEXPECTED_CHAR);
                 break;
+        }
+    }
+
+    TokenType MatchKeywordOrIdentifier(string literal)
+    {
+        if (Keywords.keywords.TryGetValue(literal, out var keyword))
+        {
+            return keyword;
+        }
+        else
+        {
+            return TokenType.IDENTIFIER;
         }
     }
 
@@ -101,7 +118,7 @@ class Scanner
             if (CheckNext() == '\n') line++;
             Advance();
         }
-        
+
         if (IsAtEnd())
         {
             Program.Error(line, Errors.UNTERMINATED_STRING);
@@ -113,10 +130,29 @@ class Scanner
         AddToken(TokenType.STRING, _source.Substring(start + 1, current - start - 2));
     }
 
-    bool IsDigit(char c)
+    void Identifier()
     {
-        return c >= '0' && c <= '9';
+        while (IsAlphaOrDigit(CheckNext()) && !IsAtEnd())
+        {
+            Advance();
+        }
+
+        string literal = _source.Substring(start, current - start);
+
+        AddToken(MatchKeywordOrIdentifier(literal), literal);
     }
+
+
+
+    bool IsDigit(char c) => (c >= '0' && c <= '9');
+
+    bool IsAlpha(char c)
+    {
+        uint v = (uint)(c | 0x20); // 와 나 이거 진짜 개천재다
+        return (v >= 'a' && v <= 'z');
+    }
+
+    bool IsAlphaOrDigit(char c) => (IsDigit(c) || IsAlpha(c));
 
     bool Match(char expected)
     {

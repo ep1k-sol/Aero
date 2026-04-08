@@ -1,6 +1,6 @@
 ﻿namespace eLang;
 
-class Debug
+static class Debug
 {
     public static void PrintTokens(List<Token> tokens)
     {
