@@ -50,6 +50,9 @@ class Program
 
         Parser parser = new Parser(tokens);
         Expr ast = parser.Parse();
+
+        Debug.PrintTokens(tokens);
+        Debug.PrintAST(ast);
     }
 
     public static void Error(int line, string message)

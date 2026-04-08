@@ -7,6 +7,11 @@ class Literal : Expr
 {
     public object? value;
     public Literal(object? value) { this.value = value; }
+
+    public override string ToString()
+    {
+        return $"\nVALUE [ {value} ]";
+    }
 }
 
 // 항
@@ -21,6 +26,11 @@ class Binary : Expr
         this.op = op;
         this.right = right;
     }
+
+    public override string ToString()
+    {
+        return $"\nLITERAL [ \nleft: {left}  |  \nop: {op}  |  \nright:{right} ]";
+    }
 }
 
 // 부호
@@ -33,6 +43,11 @@ class Unary : Expr
         this.op = op;
         this.right = right;
     }
+
+    public override string ToString()
+    {
+        return $"\nUNARY [ \nop: {op}  |  \nright: {right} ]";
+    }
 }
 
 // 숫자, 괄호
@@ -40,4 +55,9 @@ class Group : Expr
 {
     public Expr paren;
     public Group(Expr paren) { this.paren = paren; }
+
+    public override string ToString()
+    {
+        return $"\nGROUP [ \n({paren}\n) ]";
+    }
 }

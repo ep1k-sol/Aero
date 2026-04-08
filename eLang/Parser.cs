@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace eLang;
+﻿namespace eLang;
 
 class Parser
 {
@@ -23,7 +21,7 @@ class Parser
         var left = Term();
         var token = _tokens[current];
 
-        if (token.Is(TokenType.PLUS) || token.Is(TokenType.MINUS))
+        while (token.Is(TokenType.PLUS) || token.Is(TokenType.MINUS))
         {
             var op = Advance();
             var right = Term();
@@ -40,7 +38,7 @@ class Parser
         var left = Factor();
         var token = _tokens[current];
 
-        if (token.Is(TokenType.STAR) || token.Is(TokenType.SLASH))
+        while (token.Is(TokenType.STAR) || token.Is(TokenType.SLASH))
         {
             var op = Advance();
             var right = Primary();
@@ -54,7 +52,7 @@ class Parser
     // ( "+" | "-" ) Factor | Primary
     Expr Factor()
     {
-        if (_tokens[current].Is(TokenType.MINUS) || _tokens[current].Is(TokenType.PLUS))
+        while (_tokens[current].Is(TokenType.MINUS) || _tokens[current].Is(TokenType.PLUS))
         {
             var op = Advance();
             var right = Primary();
@@ -68,7 +66,7 @@ class Parser
     // NUMBER | "(" Expression ")"
     Expr Primary()
     {
-        if (Match(TokenType.LEFT_PAREN))
+        while (Match(TokenType.LEFT_PAREN))
         {
             var expr = Expression();
 
@@ -76,12 +74,10 @@ class Parser
 
             return new Group(expr);
         }
-        else
-        {
-            var node = Advance();
 
-            return new Literal(node);
-        }
+        var node = Advance();
+        return new Literal(node);
+
     }
 
     void Consume(TokenType type, string error)
