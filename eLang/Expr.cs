@@ -29,7 +29,7 @@ class Binary : Expr
 
     public override string ToString()
     {
-        return $"\nLITERAL [ \nleft: {left}  |  \nop: {op}  |  \nright:{right} ]";
+        return $"\nBinary [ \nleft: {left}  |  \nop: {op}  |  \nright:{right} ]";
     }
 }
 
@@ -58,6 +58,6 @@ class Group : Expr
 
     public override string ToString()
     {
-        return $"\nGROUP [ \n({paren}\n) ]";
+        return $"\nGROUP [ \n({paren}) ]";
     }
 }

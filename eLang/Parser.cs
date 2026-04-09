@@ -1,4 +1,6 @@
-﻿namespace eLang;
+﻿using System.Runtime.InteropServices;
+
+namespace eLang;
 
 class Parser
 {
@@ -19,14 +21,16 @@ class Parser
     Expr Expression()
     {
         var left = Term();
-        var token = _tokens[current];
+        var token = CheckNext();
 
         while (token.Is(TokenType.PLUS) || token.Is(TokenType.MINUS))
         {
             var op = Advance();
+            Console.WriteLine("at expression");
             var right = Term();
 
-            return new Binary(left, op, right);
+            left = new Binary(left, op, right);
+            token = CheckNext();
         }
 
         return left;
@@ -36,14 +40,15 @@ class Parser
     Expr Term()
     {
         var left = Factor();
-        var token = _tokens[current];
+        var token = CheckNext();
 
         while (token.Is(TokenType.STAR) || token.Is(TokenType.SLASH))
         {
             var op = Advance();
-            var right = Primary();
+            Console.WriteLine("at term");
+            var right = Factor();
 
-            return new Binary(left, op, right);
+            left = new Binary(left, op, right);
         }
 
         return left;
@@ -52,9 +57,11 @@ class Parser
     // ( "+" | "-" ) Factor | Primary
     Expr Factor()
     {
-        while (_tokens[current].Is(TokenType.MINUS) || _tokens[current].Is(TokenType.PLUS))
+        while (CheckNext().Is(TokenType.MINUS) || CheckNext().Is(TokenType.PLUS))
         {
             var op = Advance();
+            Console.WriteLine("at factor");
+
             var right = Primary();
 
             return new Unary(op, right);
@@ -76,6 +83,8 @@ class Parser
         }
 
         var node = Advance();
+        Console.WriteLine("at primary");
+
         return new Literal(node);
 
     }
@@ -92,11 +101,9 @@ class Parser
         }
     }
 
-    TokenType CheckNext()
+    Token CheckNext()
     {
-        if (IsAtEnd()) return TokenType.EOF;
-
-        return _tokens[current].type;
+        return _tokens[current];
     }
 
     bool Match(TokenType expected)
