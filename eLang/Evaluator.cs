@@ -3,7 +3,7 @@ namespace eLang;
 
 class Evaluator
 {
-    public object? Evaluate(Expr expr)
+    static public object? Evaluate(Expr expr)
     {
         if (expr is Literal l)
         {

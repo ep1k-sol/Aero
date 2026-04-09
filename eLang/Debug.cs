@@ -15,8 +15,8 @@ static class Debug
         Console.WriteLine(ast.ToString());
     }
 
-    public static void PrintEvaluated(Expr expr)
+    public static void PrintEvaluated(object? result)
     {
-        Console.WriteLine(expr.ToString());
+        Console.WriteLine(result);
     }
 }

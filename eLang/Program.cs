@@ -51,8 +51,12 @@ class Program
         Parser parser = new Parser(tokens);
         Expr ast = parser.Parse();
 
+        Evaluator evaluator = new Evaluator();
+        object? result = Evaluator.Evaluate(ast);
+
         Debug.PrintTokens(tokens);
         Debug.PrintAST(ast);
+        Debug.PrintEvaluated(result);
     }
 
     public static void Error(int line, string message)
