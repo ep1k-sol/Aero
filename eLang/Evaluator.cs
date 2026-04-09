@@ -43,7 +43,7 @@ class Evaluator
 
         if (expr is Group g)
         {
-            return Evaluate(g);
+            return Evaluate(g.paren);
         }
 
 
