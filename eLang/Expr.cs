@@ -1,17 +1,12 @@
 ﻿namespace eLang;
 
-abstract class Expr {}
+abstract class Expr { }
 
 // 문자 or 숫자
 class Literal : Expr
 {
     public object? value;
     public Literal(object? value) { this.value = value; }
-
-    public override string ToString()
-    {
-        return $"\nVALUE [ {value} ]";
-    }
 }
 
 // 항
@@ -20,16 +15,11 @@ class Binary : Expr
     public Expr left;
     public Token op;
     public Expr right;
-    public Binary(Expr left, Token op, Expr right) 
+    public Binary(Expr left, Token op, Expr right)
     {
         this.left = left;
         this.op = op;
         this.right = right;
-    }
-
-    public override string ToString()
-    {
-        return $"\nBinary \nleft: {left} \nop: {op} \nright:{right}";
     }
 }
 
@@ -43,11 +33,6 @@ class Unary : Expr
         this.op = op;
         this.right = right;
     }
-
-    public override string ToString()
-    {
-        return $"\nUNARY \nop: {op} \nright: {right} ";
-    }
 }
 
 // 숫자, 괄호
@@ -55,9 +40,4 @@ class Group : Expr
 {
     public Expr paren;
     public Group(Expr paren) { this.paren = paren; }
-
-    public override string ToString()
-    {
-        return $"\nGROUP \n({paren})";
-    }
 }

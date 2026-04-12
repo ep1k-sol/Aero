@@ -15,6 +15,7 @@ class Token
         this.line = line;
     }
 
+    // checks token's type
     public bool Is(TokenType tokentype)
     {
         if (this.type == tokentype) return true;
@@ -22,6 +23,7 @@ class Token
         return false;
     }
 
+    // as it is.
     public override string ToString()
     {
         return $"{type} {lexeme} {literal}";

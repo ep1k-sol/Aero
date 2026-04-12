@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace eLang;
+﻿namespace eLang;
 
 class Parser
 {

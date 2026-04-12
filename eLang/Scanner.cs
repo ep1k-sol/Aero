@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-
-namespace eLang;
+﻿namespace eLang;
 
 class Scanner
 {
@@ -55,6 +53,7 @@ class Scanner
             case '>': AddToken(Match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER); break;
             case '<': AddToken(Match('=') ? TokenType.LESS_EQUAL : TokenType.LESS); break;
 
+            // what is this
             case '/':
                 if (Match('/'))
                     while (!IsAtEnd() && CheckNext() != '\n') Advance();
@@ -72,7 +71,7 @@ class Scanner
 
 
 
-
+            // identifier || error
             default:
                 if (IsDigit(c))
                     Number();
@@ -85,6 +84,8 @@ class Scanner
         }
     }
 
+
+    // functions
     TokenType MatchKeywordOrIdentifier(string literal)
     {
         if (Keywords.keywords.TryGetValue(literal, out var keyword))
