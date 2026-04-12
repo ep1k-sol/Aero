@@ -1,4 +1,6 @@
-﻿namespace eLang;
+﻿using eLang.AST;
+
+namespace eLang;
 
 static class Debug
 {

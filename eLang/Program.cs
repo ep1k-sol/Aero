@@ -1,4 +1,6 @@
-﻿namespace eLang;
+﻿using eLang.AST;
+
+namespace eLang;
 
 class Program
 {

@@ -1,4 +1,4 @@
-﻿namespace eLang;
+﻿namespace eLang.AST;
 
 abstract class Expr { }
 
