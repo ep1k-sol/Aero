@@ -6,10 +6,10 @@ abstract class Stmt { }
 // declaration
 class Local : Stmt
 {
-    public string? name;
+    public object? name;
     public Expr? value;
 
-    public Local(string? name, Expr? value)
+    public Local(object? name, Expr? value)
     {
         this.name = name;
         this.value = value;
@@ -18,10 +18,10 @@ class Local : Stmt
 
 class Global : Stmt
 {
-    public string? name;
+    public object? name;
     public Expr? value;
 
-    public Global(string? name, Expr? value)
+    public Global(object? name, Expr? value)
     {
         this.name = name;
         this.value = value;

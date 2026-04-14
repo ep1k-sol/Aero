@@ -15,13 +15,13 @@ class Token
         this.line = line;
     }
 
-    // checks token's type
-    public bool Is(TokenType tokentype)
-    {
-        if (this.type == tokentype) return true;
+    //// checks token's type
+    //public bool Is(TokenType tokentype)
+    //{
+    //    if (this.type == tokentype) return true;
 
-        return false;
-    }
+    //    return false;
+    //}
 
     // as it is.
     public override string ToString()
