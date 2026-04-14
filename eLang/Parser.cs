@@ -141,10 +141,10 @@ class Parser
         return left;
     }
 
-    // ( "+" | "-" ) Unary | Primary
+    // ( "!" | "+" | "-" ) Unary | Primary
     Expr Unary()
     {
-        if (MatchNext(TokenType.PLUS) || MatchNext(TokenType.MINUS))
+        if (MatchNext(TokenType.BANG) || MatchNext(TokenType.PLUS) || MatchNext(TokenType.MINUS))
         {
             var op = Advance();
             var right = Primary();
