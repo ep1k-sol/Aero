@@ -12,47 +12,170 @@ class Parser
         _tokens = tokens;
     }
 
-    public Expr Parse()
+    private class ParseError : Exception { }
+
+    // parse
+    public List<Stmt> Parse()
     {
-        return Expression();
+        var statements = new List<Stmt>();
+
+        try
+        {
+            while (!IsAtEnd())
+            {
+                statements.Add(Statement());
+            }
+        }
+        catch (Exception)
+        {
+            Synchronize();
+            Parse();
+            throw;
+        }
+
+        return statements;
     }
 
-    /*
+    // 코드블록
+    List<Stmt> ParseBlock()
+    {
+        Consume(TokenType.LEFT_BRACE, Errors.MISSING_BRACE);
+        var statements = new List<Stmt>();
+
+        while (!CheckNext(TokenType.RIGHT_BRACE))
+        {
+            statements.Add(Statement());
+        }
+
+        Consume(TokenType.RIGHT_BRACE, Errors.UNTERMINATED_BRACE);
+        return statements;
+    }
+
+    // returns list of nodes separated with ','
+    List<T> ParseSeparatedValues<T>(TokenType end, Func<T> func, string error)
+    {
+        var result = new List<T>();
+
+        while (!CheckNext(end))
+        {
+            var node = func();
+
+            result.Add(node);
+
+            if (!CheckNext(end)) Consume(TokenType.COMMA, error);
+        }
+
+        Consume(end, error);
+        return result;
+    }
+
+    // parse arguments
+    List<Expr> Argument()
+    {
+        Consume(TokenType.LEFT_PAREN, Errors.MISSING_PARENTHESIS);
+
+        var arg = ParseSeparatedValues<Expr>(TokenType.RIGHT_PAREN, Expression, Errors.MISSING_PARENTHESIS);
+        return arg;
+    }
+
+    // parse parameters
+    List<object> Parameter()
+    {
+        Consume(TokenType.LEFT_PAREN, Errors.MISSING_PARENTHESIS);
+
+        var param = ParseSeparatedValues<object>(TokenType.RIGHT_PAREN, Expression, Errors.MISSING_PARENTHESIS);
+        return param;
+    }
+
+
+    // [ PARSING ] //
     Stmt Statement()
     {
-        var token = Advance();
+        var token = GetNext();
 
         switch (token.type)
         {
-            case TokenType.LOCAL: Local(); break;
-
-            case TokenType.GLOBAL: Global(); break;
+            case TokenType.PRINT: return Print();
+            case TokenType.LOCAL: return LocalDecl();
+            case TokenType.GLOBAL: return GlobalDecl();
 
             default:
-                return;
+                return ExprStmt();
         }
     }
 
-    // local (identifier) = (expression)
-    Stmt Local()
+    // Exprstmt
+    Stmt ExprStmt()
     {
-        var name = 
+        var expr = Expression();
 
-        Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
-        var value = Term();
-
-        return new Local(name.literal, value);
+        return new ExprStmt(expr);
     }
 
-    // global (identifier) = (expression)
-    Stmt Global()
+    // declaration
+    // "local" "func" (Identifier) "(" (Identifier ",")* ")" "{" (Statement)* "}"
+    Stmt LocalDecl()
     {
-        var name = CheckNext().Is(TokenType.IDENTIFIER) ? Advance() : throw ;
-        var value = Term();
+        var scope = Advance();
 
-        return new Local(name.literal, value);
+        if (CheckNext(TokenType.IDENTIFIER))
+        {
+            var name = Advance();
+            Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
+            var value = Expression();
+
+            return new Variable(name, value, scope);
+        }
+        else if (CheckNext(TokenType.FUNCTION))
+        {
+            Advance();
+
+            var name = Advance().literal;
+            var param = Parameter();
+            var code = ParseBlock();
+
+            return new Function(name, param, code, scope);
+        }
+
+        return new Invalid();
     }
-    */
+
+    // "global" "func" (Identifier) "(" (Identifier ",")* ")" "{" (Statement)* "}"
+    Stmt GlobalDecl()
+    {
+        var scope = Advance();
+
+        if (CheckNext(TokenType.IDENTIFIER))
+        {
+            var name = Advance();
+            Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
+            var value = Expression();
+
+            return new Variable(name, value, scope);
+        }
+        else if (CheckNext(TokenType.FUNCTION))
+        {
+            Advance();
+
+            var name = Advance().literal;
+            var param = Parameter();
+            var code = ParseBlock();
+
+            return new Function(name, param, code, scope);
+        }
+
+        return new Invalid();
+    }
+
+    // "print" "(" Expression ")"
+    Stmt Print()
+    {
+        Advance();
+
+        var value = Argument();
+
+        return new Print(value);
+    }
 
     // expression go brrr
     Expr Expression()
@@ -66,7 +189,7 @@ class Parser
     {
         var left = Comparison();
 
-        while (MatchNext(TokenType.BANG_EQUAL) || MatchNext(TokenType.EQUAL_EQUAL))
+        while (CheckNext(TokenType.BANG_EQUAL) || CheckNext(TokenType.EQUAL_EQUAL))
         {
             var op = Advance();
             var right = Comparison();
@@ -82,7 +205,7 @@ class Parser
     {
         var left = Term();
 
-        while (MatchNext(TokenType.GREATER_EQUAL) || MatchNext(TokenType.LESS_EQUAL) || MatchNext(TokenType.GREATER) || MatchNext(TokenType.LESS))
+        while (CheckNext(TokenType.GREATER_EQUAL) || CheckNext(TokenType.LESS_EQUAL) || CheckNext(TokenType.GREATER) || CheckNext(TokenType.LESS))
         {
             var op = Advance();
             var right = Term();
@@ -98,7 +221,7 @@ class Parser
     {
         var left = Factor();
 
-        while (MatchNext(TokenType.PLUS) || MatchNext(TokenType.MINUS))
+        while (CheckNext(TokenType.PLUS) || CheckNext(TokenType.MINUS))
         {
             var op = Advance();
             var right = Factor();
@@ -114,7 +237,7 @@ class Parser
     {
         var left = Power();
 
-        while (MatchNext(TokenType.STAR) || MatchNext(TokenType.SLASH) || MatchNext(TokenType.MODULO))
+        while (CheckNext(TokenType.STAR) || CheckNext(TokenType.SLASH) || CheckNext(TokenType.MODULO))
         {
             var op = Advance();
             var right = Power();
@@ -130,7 +253,7 @@ class Parser
     {
         var left = Unary();
 
-        while (MatchNext(TokenType.POWER))
+        while (CheckNext(TokenType.POWER))
         {
             var op = Advance();
             var right = Unary();
@@ -144,7 +267,7 @@ class Parser
     // ( "!" | "+" | "-" ) Unary | Primary
     Expr Unary()
     {
-        if (MatchNext(TokenType.BANG) || MatchNext(TokenType.PLUS) || MatchNext(TokenType.MINUS))
+        if (CheckNext(TokenType.BANG) || CheckNext(TokenType.PLUS) || CheckNext(TokenType.MINUS))
         {
             var op = Advance();
             var right = Primary();
@@ -174,34 +297,72 @@ class Parser
                 }
 
             default:
-                return new Literal(token.literal);
+                if (CheckNext(TokenType.LEFT_PAREN))
+                {
+                    var args = Argument();
+
+                    return new Call(token.lexeme, args);
+                }
+                else
+                {
+                    return new Literal(token.literal);
+                }
         }
+    }
+
+    void Synchronize()
+    {
+        Advance();
+
+        while (!IsAtEnd())
+        {
+            switch (GetNext().type)
+            {
+                case TokenType.PRINT:
+                case TokenType.LOCAL:
+                case TokenType.GLOBAL:
+                case TokenType.FUNCTION:
+                case TokenType.RETURN:
+                    return;
+            }
+
+            Advance();
+        }
+    }
+
+    // error
+    ParseError Error(Token token, string message)
+    {
+        Program.Error(token, message);
+        throw new ParseError();
     }
 
     // consumes current token if match, or error
     void Consume(TokenType expected, string error)
     {
-        if (_tokens[current].type == expected)
+        var token = GetNext();
+
+        if (token.type == expected)
         {
             current++;
         }
         else
         {
-            Program.Error(_tokens[current].line, error);
+            Error(token, error);
         }
     }
 
     // yeah.
-    Token CheckNext()
+    Token GetNext()
     {
         return _tokens[current];
     }
 
     // returns true if match
-    bool MatchNext(TokenType expected)
+    bool CheckNext(TokenType expected)
     {
         if (IsAtEnd()) return false;
-        if (CheckNext().type != expected) return false;
+        if (GetNext().type != expected) return false;
 
         return true;
     }
@@ -211,7 +372,7 @@ class Parser
         return _tokens[current++];
     }
 
-    //Token AdvanceIf(TokenType expected)
+    //Token CheckNext(TokenType expected)
     //{
     //    if (!MatchNext(expected)) return;
 

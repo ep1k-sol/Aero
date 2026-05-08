@@ -9,6 +9,13 @@ class Literal : Expr
     public Literal(object? value) { this.value = value; }
 }
 
+class Call : Expr
+{
+    public string name;
+    public List<Expr> args;
+    public Call(string name, List<Expr> args) { this.name = name; this.args = args; }
+}
+
 // 항
 class Binary : Expr
 {

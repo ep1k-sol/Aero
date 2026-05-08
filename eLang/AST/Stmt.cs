@@ -2,77 +2,107 @@
 
 abstract class Stmt { }
 
-
-// declaration
-class Local : Stmt
+class Invalid : Stmt
 {
-    public object? name;
-    public Expr? value;
 
-    public Local(object? name, Expr? value)
+}
+
+// idk
+class ExprStmt : Stmt
+{
+    public Expr expr;
+
+    public ExprStmt(Expr expr)
     {
-        this.name = name;
-        this.value = value;
+        this.expr = expr;
     }
 }
 
-class Global : Stmt
+// declaration
+class Variable : Stmt
 {
     public object? name;
     public Expr? value;
+    public Token? scope;
 
-    public Global(object? name, Expr? value)
+    public Variable(object? name, Expr? value, Token? scope)
     {
         this.name = name;
         this.value = value;
+        this.scope = scope;
+    }
+}
+
+class Function : Stmt
+{
+    public object? name;
+    public List<object> param;
+    public List<Stmt> code;
+    public Token scope;
+
+    public Function(object? name, List<object> param, List<Stmt> code, Token scope)
+    {
+        this.name = name;
+        this.param = param;
+        this.code = code;
+        this.scope = scope;
     }
 }
 
 // print
 class Print : Stmt
 {
-    public Expr? value;
+    public List<Expr> value;
 
-    public Print(Expr? value)
+    public Print(List<Expr> value)
     {
         this.value = value;
     }
 }
 
-// if
-class If : Stmt
-{
-    public Stmt? condition;
-    public Stmt? block;
+// input
 
-    public If(Stmt? condition, Stmt? block)
+class Input : Stmt
+{
+
+    public Input()
     {
-        this.condition = condition;
-        this.block = block;
     }
 }
-
-// loop
-class While : Stmt
-{
-    public Stmt? condition;
-    public Stmt? block;
-
-    public While(Stmt? condition, Stmt? block)
+    // if
+    class If : Stmt
     {
-        this.condition = condition;
-        this .block = block;
+        public Stmt condition;
+        public Stmt block;
+
+        public If(Stmt condition, Stmt block)
+        {
+            this.condition = condition;
+            this.block = block;
+        }
     }
-}
 
-class For : Stmt
-{
-    public Stmt? condition;
-    public Stmt? block;
-
-    public For(Stmt? condition, Stmt? block)
+    // loop
+    class While : Stmt
     {
-        this.condition = condition;
-        this.block = block;
+        public Stmt? condition;
+        public Stmt? block;
+
+        public While(Stmt? condition, Stmt? block)
+        {
+            this.condition = condition;
+            this.block = block;
+        }
     }
-}
+
+    class For : Stmt
+    {
+        public Stmt? condition;
+        public Stmt? block;
+
+        public For(Stmt? condition, Stmt? block)
+        {
+            this.condition = condition;
+            this.block = block;
+        }
+    }

@@ -15,7 +15,8 @@ static class Keywords
         {"return", TokenType.RETURN },
         {"while", TokenType.WHILE },
         {"for", TokenType.FOR },
-        {"function", TokenType.FUNCTION },
+        {"func", TokenType.FUNCTION },
         {"print", TokenType.PRINT },
+        {"input", TokenType.INPUT },
     };
 }

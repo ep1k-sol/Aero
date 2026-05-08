@@ -25,7 +25,17 @@ class Program
 
     static void RunFile(string path)
     {
-        string source = File.ReadAllText(path);
+        string source;
+        try
+        {
+            source = File.ReadAllText(path);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine($"Cannot open file '{path}': No such file or directory");
+            return;
+        }
+
         Run(source);
 
         if (hadError) Environment.Exit(2);
@@ -47,23 +57,41 @@ class Program
 
     static void Run(string source)
     {
-        Scanner scanner = new Scanner(source);
-        List<Token> tokens = scanner.ScanTokens();
+        try
+        {
+            Scanner scanner = new Scanner(source);
+            List<Token> tokens = scanner.ScanTokens();
 
-        Parser parser = new Parser(tokens);
-        Expr ast = parser.Parse();
+            Parser parser = new Parser(tokens);
+            List<Stmt> ast = parser.Parse();
 
-        Evaluator evaluator = new Evaluator();
-        object? result = Evaluator.Evaluate(ast);
+            Evaluator.Evaluate(ast);
 
-        Debug.PrintTokens(tokens);
-        Debug.PrintAST(ast);
-        Debug.PrintEvaluated(result);
+            Debug.PrintTokens(tokens);
+            Debug.PrintAST(ast);
+            // Debug.PrintEvaluated(result);
+        }
+        catch (Exception)
+        {
+            hadError = true;
+        }
     }
 
     public static void Error(int line, string message)
     {
         Report(line, "", message);
+    }
+
+    public static void Error(Token token, string message)
+    {
+        if (token.type == TokenType.EOF)
+        {
+            Report(token.line, " at end", "{message} got {token.lexeme}");
+        }
+        else
+        {
+            Report(token.line, $" at '{token.lexeme}'", $"{message} got '{token.lexeme}'");
+        }
     }
 
     static void Report(int line, string where, string message)

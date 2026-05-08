@@ -1,21 +1,56 @@
-﻿
-using eLang.AST;
+﻿using eLang.AST;
 
 namespace eLang;
 
 class Evaluator
 {
-    static public object? Evaluate(Expr expr)
+    static public void Evaluate(List<Stmt> stmts)
+    {
+        foreach (Stmt stmt in stmts)
+        {
+            if (stmt is ExprStmt e)
+            {
+                EvaluateExpr(e.expr);
+            }
+
+            if (stmt is Print p)
+            {
+                var texts = new List<string?>();
+
+                foreach (Expr v in p.value)
+                {
+                    var value = EvaluateExpr(v);
+                    texts.Add(value?.ToString());
+                }
+
+                Console.WriteLine(string.Join('\t', texts));
+            }
+        }
+    }
+
+    static private object? EvaluateExpr(Expr expr)
     {
         if (expr is Literal l)
         {
             return l.value;
         }
 
+        if (expr is Call c)
+        {
+            if (Integrated.keywords.TryGetValue(c.name, out var func))
+            {
+                return func(c.args);
+            }
+            else
+            {
+                return c;
+            }
+        }
+
         if (expr is Binary b)
         {
-            var left = Evaluate(b.left);
-            var right = Evaluate(b.right);
+            var left = EvaluateExpr(b.left);
+            var right = EvaluateExpr(b.right);
 
             if (left is null || right is null) return null;
 
@@ -32,7 +67,7 @@ class Evaluator
 
         if (expr is Unary u)
         {
-            var right = Evaluate(u.right);
+            var right = EvaluateExpr(u.right);
 
             if (right is null) return null;
 
@@ -45,7 +80,7 @@ class Evaluator
 
         if (expr is Group g)
         {
-            return Evaluate(g.paren);
+            return EvaluateExpr(g.paren);
         }
 
 
