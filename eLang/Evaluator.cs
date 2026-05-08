@@ -1,4 +1,5 @@
 ﻿using eLang.AST;
+using System.Xml.Schema;
 
 namespace eLang;
 
@@ -54,13 +55,16 @@ class Evaluator
 
             if (left is null || right is null) return null;
 
+            left = Convert.ToDouble(left);
+            right = Convert.ToDouble(right);
+
             switch (b.op.type)
             {
                 case TokenType.PLUS: return (double)left + (double)right;
                 case TokenType.MINUS: return (double)left - (double)right;
                 case TokenType.STAR: return (double)left * (double)right;
                 case TokenType.SLASH: return (double)left / (double)right;
-                case TokenType.POWER: return (Math.Pow((double)left, (double)right));
+                case TokenType.POWER: return Math.Pow((double)left, (double)right);
                 case TokenType.MODULO: return (double)left % (double)right;
             }
         }

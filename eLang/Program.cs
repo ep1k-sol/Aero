@@ -73,6 +73,7 @@ class Program
         }
         catch (Exception)
         {
+            Console.WriteLine("Error occured");
             hadError = true;
         }
     }
