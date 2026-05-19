@@ -38,13 +38,13 @@ class Scanner
             case ']': AddToken(TokenType.RIGHT_BRACKET); break;
             case '{': AddToken(TokenType.LEFT_BRACE); break;
             case '}': AddToken(TokenType.RIGHT_BRACE); break;
-            case '.': AddToken(TokenType.DOT); break;
             case ',': AddToken(TokenType.COMMA); break;
             case ';': AddToken(TokenType.SEMICOLON); break;
             case '^': AddToken(TokenType.POWER); break;
             case '%': AddToken(TokenType.MODULO); break;
 
             // two characters
+            case '.': AddToken(Match('.') ? TokenType.DOTDOT : TokenType.DOT); break;
             case '+': AddToken(Match('=') ? TokenType.PLUS_EQUAL : TokenType.PLUS); break;
             case '-': AddToken(Match('=') ? TokenType.MINUS_EQUAL : TokenType.MINUS); break;
             case '*': AddToken(Match('=') ? TokenType.STAR_EQUAL : TokenType.STAR); break;

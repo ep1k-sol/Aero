@@ -1,14 +1,34 @@
 ﻿using eLang.AST;
-using System.Xml.Schema;
 
 namespace eLang;
 
 class Evaluator
 {
-    static public void Evaluate(List<Stmt> stmts)
+    EnvironmentTable globalEnv = new EnvironmentTable();
+    public void Evaluate(List<Stmt> stmts)
     {
         foreach (Stmt stmt in stmts)
         {
+            if (stmt is Variable v)
+            {
+                var name = v.name;
+                var scope = v.scope;
+                var value = EvaluateExpr(v.value);
+
+                if (name is null || scope is null) return;
+
+                switch (scope.type)
+                {
+                    case TokenType.LOCAL: new EnvironmentTable(globalEnv).body.Add(name.ToString()!, value); break;
+                    case TokenType.GLOBAL: globalEnv.body.Add(name.ToString()!, value); break;
+                }
+            }
+
+            if (stmt is Function f)
+            {
+                Console.WriteLine("work in progress");
+            }
+
             if (stmt is ExprStmt e)
             {
                 EvaluateExpr(e.expr);
@@ -18,9 +38,9 @@ class Evaluator
             {
                 var texts = new List<string?>();
 
-                foreach (Expr v in p.value)
+                foreach (Expr expr in p.value)
                 {
-                    var value = EvaluateExpr(v);
+                    var value = EvaluateExpr(expr);
                     texts.Add(value?.ToString());
                 }
 
@@ -29,10 +49,22 @@ class Evaluator
         }
     }
 
-    static private object? EvaluateExpr(Expr expr)
+    private object? EvaluateExpr(Expr? expr)
     {
         if (expr is Literal l)
         {
+            if (l.value is null) return null;
+
+            if (globalEnv.body.TryGetValue(l.value.ToString()!, out var value))
+            {
+                if (value is Expr exp)
+                {
+                    return exp;
+                }
+
+                return value;
+            }
+
             return l.value;
         }
 
@@ -60,12 +92,21 @@ class Evaluator
 
             switch (b.op.type)
             {
+                case TokenType.BANG_EQUAL: return (left != right);
+                case TokenType.EQUAL_EQUAL: return (left == right);
+                case TokenType.GREATER_EQUAL: return ((double)left >= (double)right);
+                case TokenType.GREATER: return ((double)left > (double)right);
+                case TokenType.LESS_EQUAL: return ((double)left <= (double)right);
+                case TokenType.LESS: return ((double)left < (double)right);
+
+                case TokenType.DOTDOT: return left.ToString() + right.ToString();
                 case TokenType.PLUS: return (double)left + (double)right;
                 case TokenType.MINUS: return (double)left - (double)right;
                 case TokenType.STAR: return (double)left * (double)right;
                 case TokenType.SLASH: return (double)left / (double)right;
                 case TokenType.POWER: return Math.Pow((double)left, (double)right);
                 case TokenType.MODULO: return (double)left % (double)right;
+
             }
         }
 
@@ -73,12 +114,11 @@ class Evaluator
         {
             var right = EvaluateExpr(u.right);
 
-            if (right is null) return null;
-
             switch (u.op.type)
             {
-                case TokenType.PLUS: return (double)right;
-                case TokenType.MINUS: return -(double)right;
+                case TokenType.PLUS: return (double?)right;
+                case TokenType.MINUS: return -(double?)right;
+                case TokenType.BANG: return !IsTruthy(right);
             }
         }
 
@@ -89,5 +129,14 @@ class Evaluator
 
 
         return null;
+    }
+
+    static bool IsTruthy(object? obj)
+    {
+        if (obj is null) return false;
+        if (obj is bool b) return b;
+
+        Console.WriteLine(obj.GetType());
+        return true;
     }
 }

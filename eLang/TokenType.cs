@@ -16,6 +16,7 @@ enum TokenType
     MODULO,
     POWER,
 
+    DOTDOT,
     PLUS, PLUS_EQUAL,
     MINUS, MINUS_EQUAL,
     STAR, STAR_EQUAL,

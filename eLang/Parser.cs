@@ -120,11 +120,17 @@ class Parser
 
         if (CheckNext(TokenType.IDENTIFIER))
         {
-            var name = Advance();
-            Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
-            var value = Expression();
+            var name = Advance().literal;
+            Expr? initializer = null;
 
-            return new Variable(name, value, scope);
+            if (CheckNext(TokenType.EQUAL))
+            {
+                Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
+
+                initializer = Expression();
+            }
+
+            return new Variable(name, initializer, scope);
         }
         else if (CheckNext(TokenType.FUNCTION))
         {
@@ -147,11 +153,17 @@ class Parser
 
         if (CheckNext(TokenType.IDENTIFIER))
         {
-            var name = Advance();
-            Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
-            var value = Expression();
+            var name = Advance().literal;
+            Expr? initializer = null;
 
-            return new Variable(name, value, scope);
+            if (CheckNext(TokenType.EQUAL))
+            {
+                Consume(TokenType.EQUAL, Errors.MISSING_EQUAL);
+
+                initializer = Expression();
+            }
+
+            return new Variable(name, initializer, scope);
         }
         else if (CheckNext(TokenType.FUNCTION))
         {
@@ -216,12 +228,12 @@ class Parser
         return left;
     }
 
-    // Factor ( ( "+" | "-" ) Factor )*
+    // Factor ( ( "+" | "-" | ".." ) Factor )*
     Expr Term()
     {
         var left = Factor();
 
-        while (CheckNext(TokenType.PLUS) || CheckNext(TokenType.MINUS))
+        while (CheckNext(TokenType.PLUS) || CheckNext(TokenType.MINUS) || CheckNext(TokenType.DOTDOT))
         {
             var op = Advance();
             var right = Factor();
@@ -270,7 +282,7 @@ class Parser
         if (CheckNext(TokenType.BANG) || CheckNext(TokenType.PLUS) || CheckNext(TokenType.MINUS))
         {
             var op = Advance();
-            var right = Primary();
+            var right = Unary();
 
             return new Unary(op, right);
         }
@@ -334,7 +346,7 @@ class Parser
     ParseError Error(Token token, string message)
     {
         Program.Error(token, message);
-        throw new ParseError();
+        return new ParseError();
     }
 
     // consumes current token if match, or error

@@ -65,10 +65,12 @@ class Program
             Parser parser = new Parser(tokens);
             List<Stmt> ast = parser.Parse();
 
+            Evaluator evaluator = new Evaluator();
+
             Debug.PrintTokens(tokens);
             Debug.PrintAST(ast);
 
-            Evaluator.Evaluate(ast);
+            evaluator.Evaluate(ast);
             // Debug.PrintEvaluated(result);
         }
         catch (Exception)

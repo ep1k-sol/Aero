@@ -23,9 +23,9 @@ class Variable : Stmt
 {
     public object? name;
     public Expr? value;
-    public Token? scope;
+    public Token scope;
 
-    public Variable(object? name, Expr? value, Token? scope)
+    public Variable(object? name, Expr? value, Token scope)
     {
         this.name = name;
         this.value = value;
@@ -60,49 +60,40 @@ class Print : Stmt
     }
 }
 
-// input
-
-class Input : Stmt
+// if
+class If : Stmt
 {
+    public Stmt condition;
+    public Stmt block;
 
-    public Input()
+    public If(Stmt condition, Stmt block)
     {
+        this.condition = condition;
+        this.block = block;
     }
 }
-    // if
-    class If : Stmt
+
+// loop
+class While : Stmt
+{
+    public Stmt? condition;
+    public Stmt? block;
+
+    public While(Stmt? condition, Stmt? block)
     {
-        public Stmt condition;
-        public Stmt block;
-
-        public If(Stmt condition, Stmt block)
-        {
-            this.condition = condition;
-            this.block = block;
-        }
+        this.condition = condition;
+        this.block = block;
     }
+}
 
-    // loop
-    class While : Stmt
+class For : Stmt
+{
+    public Stmt? condition;
+    public Stmt? block;
+
+    public For(Stmt? condition, Stmt? block)
     {
-        public Stmt? condition;
-        public Stmt? block;
-
-        public While(Stmt? condition, Stmt? block)
-        {
-            this.condition = condition;
-            this.block = block;
-        }
+        this.condition = condition;
+        this.block = block;
     }
-
-    class For : Stmt
-    {
-        public Stmt? condition;
-        public Stmt? block;
-
-        public For(Stmt? condition, Stmt? block)
-        {
-            this.condition = condition;
-            this.block = block;
-        }
-    }
+}

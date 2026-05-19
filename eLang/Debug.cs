@@ -38,11 +38,6 @@ static class Debug
                 Console.WriteLine($"{indent})");
             }
 
-            if (stmt is Input i)
-            {
-                Console.WriteLine($"{indent}INPUT()");
-            }
-
             if (stmt is Variable v)
             {
                 Console.WriteLine($"{indent} VARIABLE: {v.scope?.lexeme}, {v.name}, VALUE: [");
