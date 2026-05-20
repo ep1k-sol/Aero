@@ -61,6 +61,7 @@ class Evaluator
         if (expr is Literal l)
         {
             if (l.value is null) return null;
+            if (l.value is string) return l.value;
 
             if (currentEnv.TryGetValue(l.value.ToString()!, out var value))
             {
@@ -94,8 +95,8 @@ class Evaluator
 
             if (left is null || right is null) return null;
 
-            left = Convert.ToDouble(left);
-            right = Convert.ToDouble(right);
+            if (left is double leftNum) left = leftNum;
+            if (right is double rightNum) right = rightNum;
 
             switch (b.op.type)
             {

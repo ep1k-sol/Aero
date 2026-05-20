@@ -67,7 +67,7 @@ class Program
 
             Evaluator evaluator = new Evaluator();
 
-            // Debug.PrintTokens(tokens);
+            Debug.PrintTokens(tokens);
             Debug.PrintAST(ast);
 
             evaluator.Evaluate(ast);
