@@ -4,7 +4,7 @@ public static class Errors
 {
     // scanner
     public const string UNEXPECTED_CHAR = "Unexpected Character.";
-    public const string UNTERMINATED_STRING = "Unterminated String";
+    public const string UNTERMINATED_STRING = "Unterminated String.";
 
     // parser
     public const string UNTERMINATED_PARENTHESIS = "Expect ')' after Expression or Function Call.";
@@ -12,6 +12,7 @@ public static class Errors
     public const string UNTERMINATED_BRACE = "Expect '}' after idk what to call it.";
     public const string MISSING_BRACE = "'{' is missing.";
 
+    public const string UNEXPECTED_DECL = "Expect Identifier or 'func' after scope keyword.";
 
     public const string IDENTIFIER = "Identifier is missing or wrong.";
     public const string MISSING_PUNCUATION = "',' is missing.";

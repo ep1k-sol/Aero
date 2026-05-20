@@ -16,13 +16,15 @@ class EnvironmentTable
         this.parent = parent;
     }
 
-    public object? TryGetValue(string name)
+    public bool TryGetValue(string name, out object? v)
     {
         if (body.TryGetValue(name, out var value))
         {
-            return value;
+            v = value;
+            return true;
         }
-        
-        return parent?.TryGetValue(name);
+
+        v = null;
+        return false;
     }
 }

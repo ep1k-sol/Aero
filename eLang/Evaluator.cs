@@ -5,6 +5,13 @@ namespace eLang;
 class Evaluator
 {
     EnvironmentTable globalEnv = new EnvironmentTable();
+    EnvironmentTable currentEnv;
+
+    public Evaluator()
+    {
+        currentEnv = globalEnv;
+    }
+
     public void Evaluate(List<Stmt> stmts)
     {
         foreach (Stmt stmt in stmts)
@@ -55,7 +62,7 @@ class Evaluator
         {
             if (l.value is null) return null;
 
-            if (globalEnv.body.TryGetValue(l.value.ToString()!, out var value))
+            if (currentEnv.TryGetValue(l.value.ToString()!, out var value))
             {
                 if (value is Expr exp)
                 {
@@ -99,14 +106,13 @@ class Evaluator
                 case TokenType.LESS_EQUAL: return ((double)left <= (double)right);
                 case TokenType.LESS: return ((double)left < (double)right);
 
-                case TokenType.DOTDOT: return left.ToString() + right.ToString();
+                case TokenType.DOTDOT: return $"{left.ToString()}{right.ToString()}";
                 case TokenType.PLUS: return (double)left + (double)right;
                 case TokenType.MINUS: return (double)left - (double)right;
                 case TokenType.STAR: return (double)left * (double)right;
                 case TokenType.SLASH: return (double)left / (double)right;
                 case TokenType.POWER: return Math.Pow((double)left, (double)right);
                 case TokenType.MODULO: return (double)left % (double)right;
-
             }
         }
 

@@ -143,6 +143,7 @@ class Parser
             return new Function(name, param, code, scope);
         }
 
+        Error(Advance(), Errors.UNEXPECTED_DECL);
         return new Invalid();
     }
 
@@ -176,6 +177,7 @@ class Parser
             return new Function(name, param, code, scope);
         }
 
+        Error(Advance(), Errors.UNEXPECTED_DECL);
         return new Invalid();
     }
 
