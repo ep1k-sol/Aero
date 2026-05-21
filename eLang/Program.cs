@@ -74,9 +74,9 @@ class Program
             evaluator.Evaluate(ast);
             // Debug.PrintEvaluated(result);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            Console.WriteLine("Error occured");
+            Console.WriteLine($"Error occured: {e.Message}");
             hadError = true;
         }
     }

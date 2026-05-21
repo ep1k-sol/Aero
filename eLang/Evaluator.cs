@@ -90,25 +90,31 @@ class Evaluator
 
             if (left is null || right is null) return null;
 
-            if (left is double leftNum) left = leftNum;
-            if (right is double rightNum) right = rightNum;
-
-            switch (b.op.type)
+            try
             {
-                case TokenType.BANG_EQUAL: return (left != right);
-                case TokenType.EQUAL_EQUAL: return (left == right);
-                case TokenType.GREATER_EQUAL: return ((double)left >= (double)right);
-                case TokenType.GREATER: return ((double)left > (double)right);
-                case TokenType.LESS_EQUAL: return ((double)left <= (double)right);
-                case TokenType.LESS: return ((double)left < (double)right);
+                switch (b.op.type)
+                {
+                    case TokenType.PLUS: return Convert.ToDouble(left) + Convert.ToDouble(right);
+                    case TokenType.MINUS: return Convert.ToDouble(left) - Convert.ToDouble(right);
+                    case TokenType.STAR: return Convert.ToDouble(left) * Convert.ToDouble(right);
+                    case TokenType.SLASH: return Convert.ToDouble(left) / Convert.ToDouble(right);
+                    case TokenType.POWER: return Math.Pow(Convert.ToDouble(left), Convert.ToDouble(right));
+                    case TokenType.MODULO: return Convert.ToDouble(left) % Convert.ToDouble(right);
 
-                case TokenType.DOTDOT: return $"{left.ToString()}{right.ToString()}";
-                case TokenType.PLUS: return (double)left + (double)right;
-                case TokenType.MINUS: return (double)left - (double)right;
-                case TokenType.STAR: return (double)left * (double)right;
-                case TokenType.SLASH: return (double)left / (double)right;
-                case TokenType.POWER: return Math.Pow((double)left, (double)right);
-                case TokenType.MODULO: return (double)left % (double)right;
+                    case TokenType.GREATER_EQUAL: return Convert.ToDouble(left) >= Convert.ToDouble(right);
+                    case TokenType.GREATER: return Convert.ToDouble(left) > Convert.ToDouble(right);
+                    case TokenType.LESS_EQUAL: return Convert.ToDouble(left) <= Convert.ToDouble(right);
+                    case TokenType.LESS: return Convert.ToDouble(left) < Convert.ToDouble(right);
+
+                    case TokenType.BANG_EQUAL: return !Equals(left, right);
+                    case TokenType.EQUAL_EQUAL: return Equals(left, right);
+
+                    case TokenType.DOTDOT: return $"{left}{right}";
+                }
+            }
+            catch (FormatException)
+            {
+                throw new Exception("Invalid literal for numeric operation");
             }
         }
 

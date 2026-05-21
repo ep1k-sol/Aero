@@ -71,7 +71,6 @@ class Parser
     // parse arguments
     List<Expr> Argument()
     {
-        Console.WriteLine(GetNext());
         Consume(TokenType.LEFT_PAREN, Errors.MISSING_PARENTHESIS);
 
         var arg = ParseSeparatedValues<Expr>(TokenType.RIGHT_PAREN, Expression, Errors.MISSING_PARENTHESIS);
@@ -278,7 +277,7 @@ class Parser
         return left;
     }
 
-    // ( "!" | "+" | "-" ) Unary | Primary
+    // ( "!" | "+" | "-" ) Unary | Call
     Expr Unary()
     {
         if (CheckNext(TokenType.BANG) || CheckNext(TokenType.PLUS) || CheckNext(TokenType.MINUS))
@@ -289,10 +288,30 @@ class Parser
             return new Unary(op, right);
         }
 
-        return Primary();
+        return Call();
     }
 
-    // NUMBER | "(" Expression ")"
+    // Primary ( "(" Argument? ")" ) ;
+    Expr Call()
+    {
+        var left = Primary();
+
+        if (CheckNext(TokenType.LEFT_PAREN))
+        {
+            if (left is Literal { value: string name })
+            {
+                var args = Argument();
+
+                return new Call(name, args);
+            }
+
+            throw Error(GetNext(), Errors.UNCALLABLE);
+        }
+
+        return left;
+    }
+
+    // value | "(" Expression ")"
     Expr Primary()
     {
         var token = Advance();
@@ -306,24 +325,14 @@ class Parser
             case TokenType.NUMBER or TokenType.STRING or TokenType.IDENTIFIER: return new Literal(token.literal);
             case TokenType.LEFT_PAREN:
                 {
-                    var expr = Term();
+                    var expr = Expression();
                     Consume(TokenType.RIGHT_PAREN, Errors.UNTERMINATED_PARENTHESIS);
 
                     return new Group(expr);
                 }
-            default:
-                if (CheckNextNext(TokenType.LEFT_PAREN))
-                {
-                    Console.WriteLine("여길 오나?");
-                    var args = Argument();
 
-                    return new Call(token.lexeme, args);
-                }
-                else
-                {
-                    Console.WriteLine($"from parser: {token}");
-                    throw Error(token, Errors.UNEXPECTED_LITERAL);
-                }
+            default:
+                throw Error(token, Errors.UNEXPECTED_LITERAL);
         }
     }
 
@@ -361,7 +370,7 @@ class Parser
 
         if (token.type == expected)
         {
-            current++;
+            Advance();
         }
         else
         {
@@ -375,10 +384,10 @@ class Parser
         return _tokens[current];
     }
 
-    Token GetNextNext()
-    {
-        return _tokens[current + 1];
-    }
+    //Token GetNextNext()
+    //{
+    //    return _tokens[current + 1];
+    //}
 
     // returns true if CURRENT token matchs
     bool CheckNext(TokenType expected)
@@ -390,13 +399,13 @@ class Parser
     }
 
     // returns true if NEXT token matchs
-    bool CheckNextNext(TokenType expected)
-    {
-        if (IsAtEnd()) return false;
-        if (GetNextNext().type != expected) return false;
+    //bool CheckNextNext(TokenType expected)
+    //{
+    //    if (IsAtEnd()) return false;
+    //    if (GetNextNext().type != expected) return false;
 
-        return true;
-    }
+    //    return true;
+    //}
 
     Token Advance()
     {
