@@ -67,9 +67,9 @@ class Program
             Parser parser = new Parser(tokens);
             List<Stmt> ast = parser.Parse();
 
-            Evaluator evaluator = new Evaluator();
-
             Debug.PrintAST(ast);
+
+            Evaluator evaluator = new Evaluator();
 
             evaluator.Evaluate(ast);
             // Debug.PrintEvaluated(result);
