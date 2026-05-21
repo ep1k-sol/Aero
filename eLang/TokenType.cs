@@ -42,7 +42,6 @@ enum TokenType
     FOR,
     FUNCTION,
     PRINT,
-    INPUT,
 
     EOF
 }

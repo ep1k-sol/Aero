@@ -18,5 +18,7 @@ public static class Errors
     public const string MISSING_PUNCUATION = "',' is missing.";
     public const string MISSING_EQUAL = "Expect '=' after Identifier.";
 
+    public const string UNEXPECTED_LITERAL = "Unexpected Literal.";
+
     public const string UNKNOWN = "UNKNOWN ERROR.";
 }

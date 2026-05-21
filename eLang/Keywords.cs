@@ -17,6 +17,5 @@ static class Keywords
         {"for", TokenType.FOR },
         {"func", TokenType.FUNCTION },
         {"print", TokenType.PRINT },
-        {"input", TokenType.INPUT },
     };
 }

@@ -7,8 +7,8 @@ class Scanner
 
     private int start = 0;
     private int current = 0;
-    private int line = 1;
-
+    private ushort line = 1;
+    private ushort column = 0;
     public Scanner(string source)
     {
         this._source = source;
@@ -22,13 +22,14 @@ class Scanner
             ScanToken();
         }
 
-        _tokens.Add(new Token(TokenType.EOF, "", null, line));
+        _tokens.Add(new Token(TokenType.EOF, "", null, line, column));
         return _tokens;
     }
 
     void ScanToken()
     {
         char c = Advance();
+
         switch (c)
         {
             // single character
@@ -67,7 +68,7 @@ class Scanner
             case ' ': break;
             case '\r': break;
             case '\t': break;
-            case '\n': line++; break;
+            case '\n': line++; column = 0; break;
 
             // identifier || error
             default:
@@ -77,7 +78,7 @@ class Scanner
                     Identifier();
                 else
 
-                    Program.Error(line, Errors.UNEXPECTED_CHAR);
+                    Program.Error(line, Errors.UNEXPECTED_CHAR, column);
                 break;
         }
     }
@@ -120,7 +121,7 @@ class Scanner
 
         if (IsAtEnd())
         {
-            Program.Error(line, Errors.UNTERMINATED_STRING);
+            Program.Error(line, Errors.UNTERMINATED_STRING, column);
             return;
         }
 
@@ -157,7 +158,7 @@ class Scanner
         if (IsAtEnd()) return false;
         if (_source[current] != expected) return false;
 
-        current++;
+        Advance();
         return true;
     }
 
@@ -182,6 +183,7 @@ class Scanner
 
     char Advance()
     {
+        column++;
         return _source[current++];
     }
 
@@ -192,7 +194,9 @@ class Scanner
 
     void AddToken(TokenType type, object? literal)
     {
-        string text = _source.Substring(start, current - start);
-        _tokens.Add(new Token(type, text, literal, line));
+        int length = current - start;
+
+        string text = _source.Substring(start, length);
+        _tokens.Add(new Token(type, text, literal, line, (ushort)(column - length)));
     }
 }

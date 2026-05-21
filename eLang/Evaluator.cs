@@ -48,7 +48,7 @@ class Evaluator
                 foreach (Expr expr in p.value)
                 {
                     var value = EvaluateExpr(expr);
-                    texts.Add(value?.ToString());
+                    texts.Add($"{value}");
                 }
 
                 Console.WriteLine(string.Join('\t', texts));
@@ -65,11 +65,6 @@ class Evaluator
 
             if (currentEnv.TryGetValue(l.value.ToString()!, out var value))
             {
-                if (value is Expr exp)
-                {
-                    return exp;
-                }
-
                 return value;
             }
 

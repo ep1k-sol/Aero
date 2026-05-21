@@ -26,11 +26,10 @@ class Parser
                 statements.Add(Statement());
             }
         }
-        catch (Exception)
+        catch (ParseError)
         {
             Synchronize();
             Parse();
-            throw;
         }
 
         return statements;
@@ -72,6 +71,7 @@ class Parser
     // parse arguments
     List<Expr> Argument()
     {
+        Console.WriteLine(GetNext());
         Consume(TokenType.LEFT_PAREN, Errors.MISSING_PARENTHESIS);
 
         var arg = ParseSeparatedValues<Expr>(TokenType.RIGHT_PAREN, Expression, Errors.MISSING_PARENTHESIS);
@@ -302,6 +302,8 @@ class Parser
             case TokenType.TRUE: return new Literal(true);
             case TokenType.FALSE: return new Literal(false);
             case TokenType.NIL: return new Literal(null);
+
+            case TokenType.NUMBER or TokenType.STRING or TokenType.IDENTIFIER: return new Literal(token.literal);
             case TokenType.LEFT_PAREN:
                 {
                     var expr = Term();
@@ -309,17 +311,18 @@ class Parser
 
                     return new Group(expr);
                 }
-
             default:
-                if (CheckNext(TokenType.LEFT_PAREN))
+                if (CheckNextNext(TokenType.LEFT_PAREN))
                 {
+                    Console.WriteLine("여길 오나?");
                     var args = Argument();
 
                     return new Call(token.lexeme, args);
                 }
                 else
                 {
-                    return new Literal(token.literal);
+                    Console.WriteLine($"from parser: {token}");
+                    throw Error(token, Errors.UNEXPECTED_LITERAL);
                 }
         }
     }
@@ -372,7 +375,12 @@ class Parser
         return _tokens[current];
     }
 
-    // returns true if match
+    Token GetNextNext()
+    {
+        return _tokens[current + 1];
+    }
+
+    // returns true if CURRENT token matchs
     bool CheckNext(TokenType expected)
     {
         if (IsAtEnd()) return false;
@@ -381,17 +389,19 @@ class Parser
         return true;
     }
 
+    // returns true if NEXT token matchs
+    bool CheckNextNext(TokenType expected)
+    {
+        if (IsAtEnd()) return false;
+        if (GetNextNext().type != expected) return false;
+
+        return true;
+    }
+
     Token Advance()
     {
         return _tokens[current++];
     }
-
-    //Token CheckNext(TokenType expected)
-    //{
-    //    if (!MatchNext(expected)) return;
-
-    //    return Advance();
-    //}
 
     bool IsAtEnd()
     {

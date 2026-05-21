@@ -62,12 +62,13 @@ class Program
             Scanner scanner = new Scanner(source);
             List<Token> tokens = scanner.ScanTokens();
 
+            Debug.PrintTokens(tokens);
+
             Parser parser = new Parser(tokens);
             List<Stmt> ast = parser.Parse();
 
             Evaluator evaluator = new Evaluator();
 
-            Debug.PrintTokens(tokens);
             Debug.PrintAST(ast);
 
             evaluator.Evaluate(ast);
@@ -80,26 +81,26 @@ class Program
         }
     }
 
-    public static void Error(int line, string message)
+    public static void Error(ushort line, string message, ushort column)
     {
-        Report(line, "", message);
+        Report(line, message, $"column {column}");
     }
 
     public static void Error(Token token, string message)
     {
         if (token.type == TokenType.EOF)
         {
-            Report(token.line, " at end", "{message} got {token.lexeme}");
+            Report(token.line, $"{message} got {token.lexeme}.", $"column {token.column} at end");
         }
         else
         {
-            Report(token.line, $" at '{token.lexeme}'", $"{message} got '{token.lexeme}'");
+            Report(token.line, $"{message} got '{token.lexeme}'.", $"column {token.column}");
         }
     }
 
-    static void Report(int line, string where, string message)
+    static void Report(int line, string message, string where)
     {
-        Console.Error.WriteLine($"[line {line}] Error{where}: {message}");
+        Console.Error.WriteLine($"[line {line}] {message} Error at near {where}");
         hadError = true;
     }
 }
