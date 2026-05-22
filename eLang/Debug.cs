@@ -40,7 +40,7 @@ static class Debug
 
             if (stmt is Variable v)
             {
-                Console.WriteLine($"{indent} VARIABLE: {v.scope?.lexeme}, {v.name}, VALUE: [");
+                Console.WriteLine($"{indent} VARIABLE: {v.scope.lexeme}, {v.name}, VALUE: [");
                 PrintExprAST(v.value, depth + 2);
                 Console.WriteLine($"{indent}]");
             }

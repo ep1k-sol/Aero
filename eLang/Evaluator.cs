@@ -22,7 +22,7 @@ class Evaluator
                 var scope = v.scope;
                 var value = EvaluateExpr(v.value);
 
-                if (name is null || scope is null) return;
+                if (name is null) return;
 
                 switch (scope.type)
                 {

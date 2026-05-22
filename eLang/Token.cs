@@ -1,6 +1,6 @@
 ﻿namespace eLang;
 
-class Token
+readonly struct Token
 {
     public readonly TokenType type;
     public readonly string lexeme;
@@ -17,15 +17,6 @@ class Token
         this.column = column;
     }
 
-    //// checks token's type
-    //public bool Is(TokenType tokentype)
-    //{
-    //    if (this.type == tokentype) return true;
-
-    //    return false;
-    //}
-
-    // as it is.
     public override string ToString()
     {
         return $"{type} {lexeme} {literal}";
