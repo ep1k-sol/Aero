@@ -36,7 +36,7 @@ class Parser
     }
 
     // 코드블록
-    List<Stmt> ParseBlock()
+    Block ParseBlock()
     {
         Consume(TokenType.LEFT_BRACE, Errors.MISSING_BRACE);
         var statements = new List<Stmt>();
@@ -47,7 +47,7 @@ class Parser
         }
 
         Consume(TokenType.RIGHT_BRACE, Errors.UNTERMINATED_BRACE);
-        return statements;
+        return new Block(statements);
     }
 
     // returns list of nodes separated with ','
@@ -97,6 +97,8 @@ class Parser
             case TokenType.PRINT: return Print();
             case TokenType.LOCAL: return LocalDecl();
             case TokenType.GLOBAL: return GlobalDecl();
+            case TokenType.IF: return If();
+            case TokenType.WHILE: return While();
 
             default:
                 return ExprStmt();
@@ -180,6 +182,34 @@ class Parser
         return new Invalid();
     }
 
+    Stmt If()
+    {
+        Advance();
+        Consume(TokenType.LEFT_PAREN, Errors.MISSING_PARENTHESIS);
+
+        var condition = Expression();
+
+        Consume(TokenType.RIGHT_PAREN, Errors.UNTERMINATED_PARENTHESIS);
+
+        var block = ParseBlock();
+
+        return new If(condition, block);
+    }
+
+    Stmt While()
+    {
+        Advance();
+        Consume(TokenType.LEFT_PAREN, Errors.MISSING_PARENTHESIS);
+
+        var condition = Expression();
+
+        Consume(TokenType.RIGHT_PAREN, Errors.UNTERMINATED_PARENTHESIS);
+
+        var block = ParseBlock();
+
+        return new While(condition, block);
+    }
+
     // "print" "(" Expression ")"
     Stmt Print()
     {
@@ -193,7 +223,32 @@ class Parser
     // expression go brrr
     Expr Expression()
     {
-        return Equality();
+        return Assignment();
+    }
+
+    // IDENTIFIER "=" assignment | equality;
+    Expr Assignment()
+    {
+        var left = Equality();
+
+        while (CheckNext(TokenType.EQUAL))
+        {
+            var equal = Advance();
+            var value = Expression();
+
+            if (left is VariableExpr v)
+            {
+                var target = v.value;
+
+                left = new Assign(target, value);
+            }
+            else
+            {
+                Error(equal, Errors.INVALID_ASSIGNMENT);
+            }
+        }
+
+        return left;
     }
 
 
@@ -322,7 +377,9 @@ class Parser
             case TokenType.FALSE: return new Literal(false);
             case TokenType.NIL: return new Literal(null);
 
-            case TokenType.NUMBER or TokenType.STRING or TokenType.IDENTIFIER: return new Literal(token.literal);
+            case TokenType.NUMBER or TokenType.STRING: return new Literal(token.literal);
+            case TokenType.IDENTIFIER: return new VariableExpr(token);
+
             case TokenType.LEFT_PAREN:
                 {
                     var expr = Expression();

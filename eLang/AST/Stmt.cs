@@ -33,18 +33,27 @@ class Variable : Stmt
     }
 }
 
+class Block : Stmt
+{
+    public List<Stmt> code;
+
+    public Block(List<Stmt> code)
+    {
+        this.code = code;
+    }
+}
 class Function : Stmt
 {
     public object? name;
     public List<object> param;
-    public List<Stmt> code;
+    public Block block;
     public Token scope;
-
-    public Function(object? name, List<object> param, List<Stmt> code, Token scope)
+    
+    public Function(object? name, List<object> param, Block block, Token scope)
     {
         this.name = name;
         this.param = param;
-        this.code = code;
+        this.block = block;
         this.scope = scope;
     }
 }
@@ -63,10 +72,10 @@ class Print : Stmt
 // if
 class If : Stmt
 {
-    public Stmt condition;
-    public Stmt block;
+    public Expr condition;
+    public Block block;
 
-    public If(Stmt condition, Stmt block)
+    public If(Expr condition, Block block)
     {
         this.condition = condition;
         this.block = block;
@@ -76,10 +85,10 @@ class If : Stmt
 // loop
 class While : Stmt
 {
-    public Stmt? condition;
-    public Stmt? block;
+    public Expr condition;
+    public Block block;
 
-    public While(Stmt? condition, Stmt? block)
+    public While(Expr condition, Block block)
     {
         this.condition = condition;
         this.block = block;
@@ -88,10 +97,10 @@ class While : Stmt
 
 class For : Stmt
 {
-    public Stmt? condition;
-    public Stmt? block;
+    public Expr condition;
+    public Stmt block;
 
-    public For(Stmt? condition, Stmt? block)
+    public For(Expr condition, Block block)
     {
         this.condition = condition;
         this.block = block;

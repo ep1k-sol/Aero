@@ -16,43 +16,77 @@ class Evaluator
     {
         foreach (Stmt stmt in stmts)
         {
-            if (stmt is Variable v)
+            EvaluateStmt(stmt);
+        }
+    }
+
+    public void EvaluateStmt(Stmt stmt)
+    {
+        if (stmt is Variable v)
+        {
+            var name = v.name;
+            var scope = v.scope;
+            var value = EvaluateExpr(v.value);
+
+            if (name is null) return;
+
+            switch (scope.type)
             {
-                var name = v.name;
-                var scope = v.scope;
-                var value = EvaluateExpr(v.value);
+                case TokenType.LOCAL: currentEnv.body.Add(name.ToString()!, value); break;
+                case TokenType.GLOBAL: globalEnv.body.Add(name.ToString()!, value); break;
+            }
+        }
 
-                if (name is null) return;
+        if (stmt is Block b)
+        {
+            var previousEnv = currentEnv;
 
-                switch (scope.type)
-                {
-                    case TokenType.LOCAL: new EnvironmentTable(globalEnv).body.Add(name.ToString()!, value); break;
-                    case TokenType.GLOBAL: globalEnv.body.Add(name.ToString()!, value); break;
-                }
+            currentEnv = new EnvironmentTable(currentEnv);
+            Evaluate(b.code);
+
+            currentEnv = previousEnv;
+        }
+
+        if (stmt is Function f)
+        {
+            Console.WriteLine("work in progress");
+        }
+
+        if (stmt is If i)
+        {
+            var condition = EvaluateExpr(i.condition);
+
+            if (IsTruthy(condition))
+            {
+                EvaluateStmt(i.block);
+            }
+        }
+
+        if (stmt is While w)
+        {
+            while (IsTruthy(EvaluateExpr(w.condition)))
+            {
+                Console.WriteLine(IsTruthy(EvaluateExpr(w.condition)));
+                EvaluateStmt(w.block);
+            }
+        }
+
+        if (stmt is ExprStmt e)
+        {
+            EvaluateExpr(e.expr);
+        }
+
+        if (stmt is Print p)
+        {
+            var texts = new List<string?>();
+
+            foreach (Expr expr in p.value)
+            {
+                var value = EvaluateExpr(expr);
+                texts.Add($"{value}");
             }
 
-            if (stmt is Function f)
-            {
-                Console.WriteLine("work in progress");
-            }
-
-            if (stmt is ExprStmt e)
-            {
-                EvaluateExpr(e.expr);
-            }
-
-            if (stmt is Print p)
-            {
-                var texts = new List<string?>();
-
-                foreach (Expr expr in p.value)
-                {
-                    var value = EvaluateExpr(expr);
-                    texts.Add($"{value}");
-                }
-
-                Console.WriteLine(string.Join('\t', texts));
-            }
+            Console.WriteLine(string.Join('\t', texts));
         }
     }
 
@@ -61,14 +95,34 @@ class Evaluator
         if (expr is Literal l)
         {
             if (l.value is null) return null;
-            if (l.value is string) return l.value;
+            if (l.value is string s) return s;
 
-            if (currentEnv.TryGetValue(l.value.ToString()!, out var value))
+            return l.value;
+        }
+
+        if (expr is VariableExpr v)
+        {
+            string name = v.value.lexeme;
+            if (currentEnv.TryGetValue(name, out var valuee))
+            {
+                return valuee;
+            }
+
+            throw new Exception("Undefined Variable");
+        }
+
+        if (expr is Assign a)
+        {
+            string name = a.target.lexeme;
+            var value = EvaluateExpr(a.value);
+
+
+            if (currentEnv.UpdateValue(name, value))
             {
                 return value;
             }
 
-            return l.value;
+            throw new Exception($"Undefined Variable");
         }
 
         if (expr is Call c)
@@ -144,7 +198,6 @@ class Evaluator
         if (obj is null) return false;
         if (obj is bool b) return b;
 
-        Console.WriteLine(obj.GetType());
         return true;
     }
 }

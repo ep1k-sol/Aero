@@ -9,11 +9,27 @@ class Literal : Expr
     public Literal(object? value) { this.value = value; }
 }
 
+class Assign : Expr
+{
+    public Token target;
+    public Expr value;
+
+    public Assign(Token target, Expr value)
+    {
+        this.target = target;
+        this.value = value;
+    }
+}
+
 class Call : Expr
 {
     public string name;
     public List<Expr> args;
-    public Call(string name, List<Expr> args) { this.name = name; this.args = args; }
+    public Call(string name, List<Expr> args)
+    {
+        this.name = name;
+        this.args = args;
+    }
 }
 
 // 항
@@ -40,6 +56,12 @@ class Unary : Expr
         this.op = op;
         this.right = right;
     }
+}
+
+class VariableExpr : Expr
+{
+    public Token value;
+    public VariableExpr(Token value) { this.value = value; }
 }
 
 // 숫자, 괄호
