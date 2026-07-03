@@ -1,4 +1,4 @@
-﻿namespace eLang;
+﻿namespace Aero;
 
 static class Keywords
 {
@@ -9,13 +9,14 @@ static class Keywords
         {"true", TokenType.TRUE },
         {"false", TokenType.FALSE },
         {"if", TokenType.IF },
+        {"else", TokenType.ELSE },
         {"nil", TokenType.NIL },
         {"local", TokenType.LOCAL },
         {"global", TokenType.GLOBAL },
         {"return", TokenType.RETURN },
         {"while", TokenType.WHILE },
+        {"break", TokenType.BREAK },
         {"for", TokenType.FOR },
         {"func", TokenType.FUNCTION },
-        {"print", TokenType.PRINT },
     };
 }

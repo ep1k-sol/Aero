@@ -1,6 +1,6 @@
-﻿using eLang.AST;
+﻿using Aero.AST;
 
-namespace eLang;
+namespace Aero;
 
 class Program
 {
@@ -36,7 +36,8 @@ class Program
             return;
         }
 
-        Run(source);
+        Run(source, Path.GetDirectoryName(path)!);
+        Console.WriteLine(path);
 
         if (hadError) Environment.Exit(2);
     }
@@ -49,48 +50,57 @@ class Program
             string? line = Console.ReadLine();
 
             if (line == null) break;
-            Run(line);
+            Run(line, ".");
 
             hadError = false;
         }
     }
 
-    static void Run(string source)
+    static void Run(string source, string dirpath)
     {
         try
         {
             Scanner scanner = new Scanner(source);
             List<Token> tokens = scanner.ScanTokens();
-
-            Debug.PrintTokens(tokens);
+            //Debug.PrintTokens(tokens);
 
             Parser parser = new Parser(tokens);
             List<Stmt> ast = parser.Parse();
+            //Debug.PrintAST(ast);
 
-            Debug.PrintAST(ast);
-
-            Evaluator evaluator = new Evaluator();
-
+            Evaluator evaluator = new Evaluator(dirpath);
             evaluator.Evaluate(ast);
-            // Debug.PrintEvaluated(result);
+        }
+        catch (RuntimeError e)
+        {
+            RuntimeError(e);
+            hadError = true;
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error occured: {e.Message}");
+            Console.WriteLine("?");
+            Console.WriteLine(e.Message);
             hadError = true;
         }
     }
 
+    public static void RuntimeError(RuntimeError e)
+    {
+        Console.Error.WriteLine($"[line {e.token.line}] {e.GetType().Name}: {e.Message} at column {e.token.column}");
+    }
+
+    // from scanner
     public static void Error(ushort line, string message, ushort column)
     {
         Report(line, message, $"column {column}");
     }
 
+    // from parser
     public static void Error(Token token, string message)
     {
         if (token.type == TokenType.EOF)
         {
-            Report(token.line, $"{message} got {token.lexeme}.", $"column {token.column} at end");
+            Report(token.line, $"{message} got '{token.lexeme}'.", $"column {token.column} at end");
         }
         else
         {

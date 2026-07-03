@@ -1,4 +1,4 @@
-﻿namespace eLang;
+﻿namespace Aero;
 
 enum TokenType
 {
@@ -10,6 +10,7 @@ enum TokenType
     // punctuation
     DOT,
     COMMA,
+    COLON,
     SEMICOLON,
 
     // operator
@@ -17,8 +18,8 @@ enum TokenType
     POWER,
 
     DOTDOT,
-    PLUS, PLUS_EQUAL,
-    MINUS, MINUS_EQUAL,
+    PLUS, PLUS_PLUS, PLUS_EQUAL,
+    MINUS, MINUS_MINUS, MINUS_EQUAL,
     STAR, STAR_EQUAL,
     SLASH, SLASH_EQUAL,
     EQUAL, EQUAL_EQUAL,
@@ -38,10 +39,9 @@ enum TokenType
     NIL,
     LOCAL, GLOBAL,
     RETURN,
-    WHILE,
+    WHILE, BREAK,
     FOR,
     FUNCTION,
-    PRINT,
 
     EOF
 }

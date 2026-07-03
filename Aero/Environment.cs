@@ -1,11 +1,8 @@
-﻿using eLang.AST;
-using System.ComponentModel.DataAnnotations;
-
-namespace eLang;
+﻿namespace Aero;
 
 class EnvironmentTable
 {
-    public Dictionary<string, object?> body = new();
+    public Dictionary<string, AeroValue> body = new();
     public EnvironmentTable? parent;
     public EnvironmentTable()
     {
@@ -17,7 +14,7 @@ class EnvironmentTable
         this.parent = parent;
     }
 
-    public bool UpdateValue(string name, object? value)
+    public bool UpdateValue(string name, AeroValue value)
     {
         if (body.ContainsKey(name))
         {
@@ -33,7 +30,14 @@ class EnvironmentTable
         return false;
     }
 
-    public bool TryGetValue(string name, out object? v)
+    public bool TryDeclare(string name, AeroValue value)
+    {
+        if (body.ContainsKey(name)) return false;
+        body.Add(name, value);
+        return true;
+    }
+
+    public bool TryGetValue(string name, out AeroValue v)
     {
         if (body.TryGetValue(name, out var value))
         {
@@ -46,7 +50,7 @@ class EnvironmentTable
             return parent.TryGetValue(name, out v);
         }
 
-        v = null;
+        v = AeroValue.NilValue();
         return false;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace eLang;
+﻿namespace Aero;
 
 readonly struct Token
 {
@@ -16,7 +16,6 @@ readonly struct Token
         this.line = line;
         this.column = column;
     }
-
     public override string ToString()
     {
         return $"{type} {lexeme} {literal}";

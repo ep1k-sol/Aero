@@ -1,14 +1,15 @@
-﻿namespace eLang;
+﻿namespace Aero;
 
 class Scanner
 {
     readonly string _source;
-    readonly List<Token> _tokens = new List<Token>();
+    readonly List<Token> _tokens = new List<Token>(1024);
 
     private int start = 0;
     private int current = 0;
     private ushort line = 1;
     private ushort column = 0;
+
     public Scanner(string source)
     {
         this._source = source;
@@ -40,21 +41,30 @@ class Scanner
             case '{': AddToken(TokenType.LEFT_BRACE); break;
             case '}': AddToken(TokenType.RIGHT_BRACE); break;
             case ',': AddToken(TokenType.COMMA); break;
+            case ':': AddToken(TokenType.COLON); break;
             case ';': AddToken(TokenType.SEMICOLON); break;
             case '^': AddToken(TokenType.POWER); break;
             case '%': AddToken(TokenType.MODULO); break;
 
             // two characters
             case '.': AddToken(Match('.') ? TokenType.DOTDOT : TokenType.DOT); break;
-            case '+': AddToken(Match('=') ? TokenType.PLUS_EQUAL : TokenType.PLUS); break;
-            case '-': AddToken(Match('=') ? TokenType.MINUS_EQUAL : TokenType.MINUS); break;
+            case '+':
+                if (Match('=')) AddToken(TokenType.PLUS_EQUAL);
+                else if (Match('+')) AddToken(TokenType.PLUS_PLUS);
+                else AddToken(TokenType.PLUS);
+                break;
+            case '-':
+                if (Match('=')) AddToken(TokenType.MINUS_EQUAL);
+                else if (Match('-')) AddToken(TokenType.MINUS_MINUS);
+                else AddToken(TokenType.MINUS);
+                break;
             case '*': AddToken(Match('=') ? TokenType.STAR_EQUAL : TokenType.STAR); break;
             case '=': AddToken(Match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL); break;
             case '!': AddToken(Match('=') ? TokenType.BANG_EQUAL : TokenType.BANG); break;
             case '>': AddToken(Match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER); break;
             case '<': AddToken(Match('=') ? TokenType.LESS_EQUAL : TokenType.LESS); break;
 
-            // what is this
+            // comment or slash
             case '/':
                 if (Match('/'))
                     while (!IsAtEnd() && CheckNext() != '\n') Advance();
@@ -70,31 +80,24 @@ class Scanner
             case '\t': break;
             case '\n': line++; column = 0; break;
 
-            // identifier || error
             default:
                 if (IsDigit(c))
                     Number();
                 else if (IsAlpha(c))
                     Identifier();
                 else
-
-                    Program.Error(line, Errors.UNEXPECTED_CHAR, column);
+                    Program.Error(line, "Unexpected character.", column);
                 break;
         }
     }
-
 
     // functions
     TokenType MatchKeywordOrIdentifier(string literal)
     {
         if (Keywords.keywords.TryGetValue(literal, out var keyword))
-        {
             return keyword;
-        }
         else
-        {
             return TokenType.IDENTIFIER;
-        }
     }
 
     void Number()
@@ -104,11 +107,11 @@ class Scanner
         if (CheckNext() == '.' && IsDigit(CheckNextNext()))
         {
             Advance();
-
             while (IsDigit(CheckNext())) Advance();
         }
 
-        AddToken(TokenType.NUMBER, double.Parse(_source.Substring(start, current - start)));
+        var lexeme = _source.Substring(start, current - start);
+        _tokens.Add(new Token(TokenType.NUMBER, lexeme, double.Parse(lexeme), line, (ushort)(column - lexeme.Length)));
     }
 
     void String(char c)
@@ -121,27 +124,25 @@ class Scanner
 
         if (IsAtEnd())
         {
-            Program.Error(line, Errors.UNTERMINATED_STRING, column);
+            Program.Error(line, "Unterminated string.", column);
             return;
         }
 
         Advance();
 
-        AddToken(TokenType.STRING, _source.Substring(start + 1, current - start - 2));
+        var value = _source.Substring(start + 1, current - start - 2);
+        var lexeme = _source.Substring(start, current - start);
+        _tokens.Add(new Token(TokenType.STRING, lexeme, value, line, (ushort)(column - lexeme.Length)));
     }
 
     void Identifier()
     {
         while (IsAlphaOrDigit(CheckNext()) && !IsAtEnd())
-        {
             Advance();
-        }
 
-        string literal = _source.Substring(start, current - start);
-        AddToken(MatchKeywordOrIdentifier(literal), literal);
+        var lexeme = _source.Substring(start, current - start);
+        _tokens.Add(new Token(MatchKeywordOrIdentifier(lexeme), lexeme, null, line, (ushort)(column - lexeme.Length)));
     }
-
-
 
     bool IsDigit(char c) => (c >= '0' && c <= '9');
 
@@ -165,14 +166,12 @@ class Scanner
     char CheckNext()
     {
         if (IsAtEnd()) return '\0';
-
         return _source[current];
     }
 
     char CheckNextNext()
     {
         if (current + 1 >= _source.Length) return '\0';
-
         return _source[current + 1];
     }
 
@@ -189,14 +188,7 @@ class Scanner
 
     void AddToken(TokenType type)
     {
-        AddToken(type, null);
-    }
-
-    void AddToken(TokenType type, object? literal)
-    {
-        int length = current - start;
-
-        string text = _source.Substring(start, length);
-        _tokens.Add(new Token(type, text, literal, line, (ushort)(column - length)));
+        var lexeme = _source.Substring(start, current - start);
+        _tokens.Add(new Token(type, lexeme, null, line, (ushort)(column - lexeme.Length)));
     }
 }
