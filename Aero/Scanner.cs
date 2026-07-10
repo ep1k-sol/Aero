@@ -149,7 +149,7 @@ class Scanner
     bool IsAlpha(char c)
     {
         uint v = (uint)(c | 0x20); // 와 나 이거 진짜 개천재다 어케 떠올렸지
-        return (v >= 'a' && v <= 'z');
+        return (v >= 'a' && v <= 'z' || c == '_');
     }
 
     bool IsAlphaOrDigit(char c) => (IsDigit(c) || IsAlpha(c));

@@ -37,7 +37,6 @@ class Program
         }
 
         Run(source, Path.GetDirectoryName(path)!);
-        Console.WriteLine(path);
 
         if (hadError) Environment.Exit(2);
     }
