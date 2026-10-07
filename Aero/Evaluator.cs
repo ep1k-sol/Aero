@@ -220,6 +220,7 @@ partial class Evaluator
                 case TokenType.PLUS:
                 case TokenType.MINUS:
                 case TokenType.STAR:
+                case TokenType.SLASH:
                 case TokenType.POWER:
                 case TokenType.MODULO:
                 case TokenType.GREATER_EQUAL:
@@ -227,36 +228,33 @@ partial class Evaluator
                 case TokenType.LESS_EQUAL:
                 case TokenType.LESS:
                     {
-                        if (left.type != AeroType.NumberValue || right.type != AeroType.NumberValue)
+                        if (left.type != AeroType.NumberValue)
                         {
-                            throw new TypeError(b.op, $"Operator '{b.op.lexeme}' requires numeric operands.");
+                            string hint = right.type == AeroType.NumberValue ? $"[Tip]: Try swapping the order: '{right} + {left}'" : "";
+
+                            throw new TypeError(b.op, $"Operator '{b.op.lexeme}' requires a number on the left-hand side, but got '{left.type.Name()}'.\n{hint}");
                         }
+
+                        if (!right.TryToNumber(out var r))
+                            throw new TypeError(b.op, $"Operator '{b.op.lexeme}' cannot convert right-hand operand of type '{right.type.Name()}' to a number.");
+                        
+                        if (b.op.type == TokenType.SLASH && r == 0)
+                            throw new ZeroDivisionError(b.op, "Division by zero.");
 
                         return b.op.type switch
                         {
-                            TokenType.PLUS => new AeroValue(AeroType.NumberValue, left.number + right.number),
-                            TokenType.MINUS => new AeroValue(AeroType.NumberValue, left.number - right.number),
-                            TokenType.STAR => new AeroValue(AeroType.NumberValue, left.number * right.number),
-                            TokenType.POWER => new AeroValue(AeroType.NumberValue, Math.Pow(left.number, right.number)),
-                            TokenType.MODULO => new AeroValue(AeroType.NumberValue, left.number % right.number),
-                            TokenType.GREATER_EQUAL => new AeroValue(AeroType.BoolValue, left.number >= right.number),
-                            TokenType.GREATER => new AeroValue(AeroType.BoolValue, left.number > right.number),
-                            TokenType.LESS_EQUAL => new AeroValue(AeroType.BoolValue, left.number <= right.number),
-                            TokenType.LESS => new AeroValue(AeroType.BoolValue, left.number < right.number),
+                            TokenType.PLUS => new AeroValue(AeroType.NumberValue, left.number + r),
+                            TokenType.MINUS => new AeroValue(AeroType.NumberValue, left.number - r),
+                            TokenType.STAR => new AeroValue(AeroType.NumberValue, left.number * r),
+                            TokenType.SLASH => new AeroValue(AeroType.NumberValue, left.number / r),
+                            TokenType.POWER => new AeroValue(AeroType.NumberValue, Math.Pow(left.number, r)),
+                            TokenType.MODULO => new AeroValue(AeroType.NumberValue, left.number % r),
+                            TokenType.GREATER_EQUAL => new AeroValue(AeroType.BoolValue, left.number >= r),
+                            TokenType.GREATER => new AeroValue(AeroType.BoolValue, left.number > r),
+                            TokenType.LESS_EQUAL => new AeroValue(AeroType.BoolValue, left.number <= r),
+                            TokenType.LESS => new AeroValue(AeroType.BoolValue, left.number < r),
                             _ => AeroValue.NilValue()
                         };
-                    }
-
-                case TokenType.SLASH:
-                    {
-                        if (left.type != AeroType.NumberValue || right.type != AeroType.NumberValue)
-                            throw new TypeError(b.op, "Operator '/' requires numeric operands.");
-
-                        var divisor = right.number;
-                        if (divisor == 0)
-                            throw new ZeroDivisionError(b.op, "Division by zero.");
-
-                        return new AeroValue(AeroType.NumberValue, left.number / divisor);
                     }
 
                 case TokenType.BANG_EQUAL: return new AeroValue(AeroType.BoolValue, !AeroEquals(left, right));

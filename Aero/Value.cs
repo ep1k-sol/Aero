@@ -1,4 +1,6 @@
-﻿namespace Aero;
+﻿using System.Globalization;
+
+namespace Aero;
 
 enum AeroType
 {
@@ -47,11 +49,33 @@ struct AeroValue
 
     public static AeroValue NilValue() => new(AeroType.NilValue, (object?)null);
 
+
+    public bool TryToNumber(out double result)
+    {
+        switch (type)
+        {
+            case AeroType.NumberValue:
+                result = number;
+                return true;
+            case AeroType.BoolValue:
+                result = boolean ? 1 : 0;
+                return true;
+            case AeroType.StringValue:
+                return double.TryParse(String, NumberStyles.Float,
+                                       CultureInfo.InvariantCulture, out result);
+            default:
+                result = 0;
+                return false;
+        }
+    }
+
     public override string ToString()
     {
         return type switch
         {
-            AeroType.NumberValue => number % 1 == 0 ? ((int)number).ToString() : number.ToString(),
+            AeroType.NumberValue => double.IsFinite(number) && number % 1 == 0 && Math.Abs(number) < 1e15
+    ? ((long)number).ToString(CultureInfo.InvariantCulture)
+    : number.ToString(CultureInfo.InvariantCulture),
             AeroType.BoolValue => boolean.ToString(),
             AeroType.NilValue => "nil",
             AeroType.StringValue => String,
