@@ -148,23 +148,7 @@ class Parser
             // DictLiteral
             case TokenType.LEFT_BRACE:
                 {
-                    var pairs = new List<(Token key, Expr value)>();
-
-                    while (!CheckNext(TokenType.RIGHT_BRACE))
-                    {
-                        var key = ConsumeKey();
-
-                        Consume(TokenType.COLON, "Expect ':' after dictionary key.");
-
-                        var value = Expression();
-
-                        pairs.Add((key, value));
-
-                        if (!CheckNext(TokenType.RIGHT_BRACE))
-                            Consume(TokenType.COMMA, "Expect ',' between dictionary pairs.");
-                    }
-
-                    Consume(TokenType.RIGHT_BRACE, "Expect '}' after dictionary.");
+                    var pairs = Dictionary();
                     return new DictLiteral(pairs, null);
                 }
 
@@ -267,9 +251,7 @@ class Parser
             // Function Call
             case TokenType.LEFT_PAREN:
                 {
-                    var args = ParseSeparatedValues<Expr>(
-                        TokenType.RIGHT_PAREN, Expression, "Expect ')' after arguments."
-                    );
+                    var args = Argument();
                     return new Call(left, op, args);
                 }
 
@@ -482,12 +464,16 @@ class Parser
     {
         var result = new List<T>();
 
+        if (IsAtEnd())
+            Error(Advance(), error);
+
         while (!CheckNext(end))
         {
             var node = func();
             result.Add(node);
 
-            if (!CheckNext(end)) Consume(TokenType.COMMA, "Expect ',' between values.");
+            if (!CheckNext(end))
+                Consume(TokenType.COMMA, "Expect ',' between values.");
         }
 
         Consume(end, error);
@@ -496,8 +482,7 @@ class Parser
 
     List<Expr> Argument()
     {
-        Consume(TokenType.LEFT_PAREN, "Expect '(' before arguments.");
-        return ParseSeparatedValues<Expr>(TokenType.RIGHT_PAREN, Expression, "Expect ')' after arguments.");
+        return ParseSeparatedValues<Expr>(TokenType.RIGHT_PAREN, Expression, "Expect ')' after group.");
     }
 
     List<Token> Parameter()
@@ -509,6 +494,32 @@ class Parser
     List<Expr> Array()
     {
         return ParseSeparatedValues<Expr>(TokenType.RIGHT_BRACKET, Expression, "Expect ']' after array");
+    }
+
+    List<(Token, Expr)> Dictionary()
+    {
+        var pairs = new List<(Token key, Expr value)>();
+
+        if (IsAtEnd())
+            Error(Advance(), "Expect '}' after dictionary.");
+
+        while (!CheckNext(TokenType.RIGHT_BRACE))
+        {
+            var key = ConsumeKey();
+
+            Consume(TokenType.COLON, "Expect ':' after dictionary key.");
+
+            var value = Expression();
+
+            pairs.Add((key, value));
+
+            if (!CheckNext(TokenType.RIGHT_BRACE))
+                Consume(TokenType.COMMA, "Expect ',' between dictionary pairs.");
+        }
+
+        Consume(TokenType.RIGHT_BRACE, "Expect '}' after dictionary");
+
+        return pairs;
     }
 
     void Synchronize()
