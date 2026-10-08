@@ -99,11 +99,11 @@ class Program
     {
         if (token.type == TokenType.EOF)
         {
-            Report(token.line, $"{message} got '{token.lexeme}'.", $"column {token.column} at end");
+            Report(token.line, $"{message}", $"column {token.column} at end");
         }
         else
         {
-            Report(token.line, $"{message} got '{token.lexeme}'.", $"column {token.column}");
+            Report(token.line, $"{message}", $"column {token.column}");
         }
     }
 
